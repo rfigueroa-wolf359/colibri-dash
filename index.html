@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Colibrí Dash</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;800&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: playful, warm, a little fiesta — a game in a hand-painted housing
+   IDEA: a town at dusk during a fiesta, seen from a hummingbird's eye
+   PICTURE: the live game itself, full height, with layered town silhouette
+   COLOUR and TYPE: magenta-to-marigold dusk, cactus green, papel picado brights; Lilita One + Nunito
+   LAYOUT: game centered top, small controls row and tester notes below; stacks naturally on phones */
+:root{color-scheme:light dark;--bg:light-dark(#2a1240,#1a0b29);--ink:#fff7ec;--sun:#ffb53b;--pink:#ff3d8b;--green:#2e9e5b}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Nunito,'Baloo 2',system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;overflow-x:clip}
+.wrap{width:100%;max-width:460px;padding:12px 12px 28px;display:flex;flex-direction:column;gap:12px}
+.game{position:relative;width:100%;aspect-ratio:9/16;max-height:82vh;margin:0 auto;border-radius:22px;overflow:hidden;box-shadow:0 0 0 4px #ffb53b,0 0 0 8px #ff3d8b,0 18px 40px #0008;touch-action:none;user-select:none;-webkit-user-select:none;cursor:pointer}
+@supports (aspect-ratio:9/16){.game{height:auto}}
+canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:24px;background:linear-gradient(#0000,#1a0b2999 40%,#1a0b29cc);pointer-events:none}
+.ov.hide{display:none}
+.ov h1{font:400 clamp(40px,12vw,56px)/1 'Lilita One',sans-serif;margin:0;color:#fff;text-shadow:0 4px 0 #ff3d8b,0 8px 0 #7a1e6b}
+.ov p{margin:0;max-width:30ch;font-weight:600}
+.big{font:400 64px/1 'Lilita One',sans-serif;color:var(--sun)}
+.ov .btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;pointer-events:auto}
+button{font:800 16px Nunito,'Baloo 2',sans-serif;min-height:44px;padding:10px 18px;border-radius:999px;border:0;cursor:pointer;color:#2a1240;background:var(--sun)}
+button.alt{background:#fff7ec}
+button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.tap{animation:pulse 1.2s ease-in-out infinite;font-weight:800;color:var(--sun)}
+@keyframes pulse{50%{opacity:.4}}
+@media(prefers-reduced-motion:reduce){.tap{animation:none}}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.bar small{opacity:.75}
+.notes{background:#ffffff12;border-radius:16px;padding:14px 16px;font-size:15px}
+.notes h2{font:400 22px/1.1 'Lilita One','Baloo 2',sans-serif;margin:0 0 6px;color:var(--sun)}
+.notes ul{margin:0;padding-left:18px}
+.toast{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:#fff7ec;color:#2a1240;font-weight:800;padding:8px 14px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+input{font:800 16px Nunito,'Baloo 2',sans-serif;min-height:44px;padding:8px 14px;border-radius:999px;border:2px solid #ffffff40;background:#ffffff14;color:var(--ink);width:100%}
+input::placeholder{color:#fff7ec99}
+.save{display:flex;gap:8px;pointer-events:auto;width:100%;max-width:310px}.save input{flex:1}.save.hide{display:none}
+.lbp{position:absolute;inset:0;z-index:6;display:flex;flex-direction:column;gap:10px;padding:56px 18px 18px;background:#1a0b29;overflow:auto;cursor:auto}
+.lbp.hide{display:none}
+.lbp h2{font:400 30px/1 'Lilita One','Baloo 2',sans-serif;margin:0;color:var(--sun);text-align:center}
+.tabs{display:flex;gap:6px;justify-content:center}.tabs button{background:#ffffff1a;color:var(--ink)}.tabs button[aria-pressed=true]{background:var(--sun);color:#2a1240}
+.lbg{margin:0;text-align:center;opacity:.85;font-size:14px;font-weight:800}
+#lbList{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;flex:1}
+#lbList li{display:flex;gap:10px;align-items:center;background:#ffffff12;border-radius:12px;padding:8px 12px;font-weight:800}
+#lbList .r{width:1.7em;color:var(--sun);text-align:center}#lbList .n{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#lbList li.me{outline:2px solid var(--sun)}#lbList li.msg{background:none;justify-content:center;text-align:center;opacity:.85;font-weight:600}
+.gc{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:600}
+.mute{position:absolute;top:10px;right:10px;z-index:5;width:44px;height:44px;min-height:0;padding:0;border-radius:50%;background:#0006;color:#fff;font-size:20px;line-height:44px}
+.langs{display:flex;align-items:center;gap:6px;background:#ffffff12;padding:4px 4px 4px 12px;border-radius:999px}
+.langs select{font:800 16px Nunito,'Baloo 2',sans-serif;min-height:40px;padding:6px 10px;border:0;border-radius:999px;background:var(--sun);color:#2a1240;cursor:pointer}
+.langs select:focus-visible{outline:3px solid #fff;outline-offset:2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="game" id="game">
+    <canvas id="c"></canvas>
+    <div class="ov" id="start">
+      <h1>Colibrí<br>Dash</h1>
+      <p id="t-how"></p>
+      <p class="tap" id="t-tap"></p>
+      <p id="t-best"></p>
+    </div>
+    <div class="ov hide" id="over">
+      <p id="t-over" style="font:400 30px 'Lilita One','Baloo 2',sans-serif"></p>
+      <div class="big" id="final">0</div>
+      <p id="t-best2"></p>
+      <div class="save" id="saveBox"><input id="nick" maxlength="16" autocomplete="nickname" enterkeyhint="done"><button id="saveBtn"></button></div>
+      <div class="btns">
+        <button id="again"></button>
+        <button class="alt" id="share"></button>
+        <button class="alt" id="lbBtn"></button>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <button class="mute" id="mute">🔊</button>
+    <button class="mute" id="trophy" style="right:auto;left:10px">🏆</button>
+    <div class="lbp hide" id="lbp" role="dialog" aria-modal="true" aria-labelledby="lbTitle">
+      <h2 id="lbTitle"></h2>
+      <div class="tabs"><button id="tabW" aria-pressed="true"></button><button id="tabA" aria-pressed="false"></button></div>
+      <p class="lbg" id="lbGroupLabel"></p>
+      <ol id="lbList"></ol>
+      <label class="gc"><span id="t-group"></span><input id="gcode" maxlength="12" autocapitalize="characters" autocomplete="off" placeholder="FIGUEROA"></label>
+      <button id="lbClose"></button>
+    </div>
+  </div>
+  <div class="bar">
+    <small id="t-proto"></small>
+    <label class="langs"><span aria-hidden="true">🌐</span><select id="lang" aria-label="Idioma · Language"><option value="es" lang="es">Español</option><option value="en" lang="en">English</option><option value="pt" lang="pt-BR">Português (BR)</option><option value="fr" lang="fr-CA">Français (CA)</option><option value="it" lang="it">Italiano</option><option value="de" lang="de">Deutsch</option><option value="id" lang="id">Bahasa Indonesia</option><option value="fil" lang="fil">Filipino</option><option value="sw" lang="sw">Kiswahili</option><option value="hi" lang="hi">हिन्दी</option><option value="ja" lang="ja">日本語</option><option value="zh" lang="zh-Hans">中文（简体）</option><option value="nah" lang="nah">Nāhuatl</option><option value="yua" lang="yua">Màaya t'àan</option></select></label>
+  </div>
+  <div class="notes">
+    <h2 id="t-nh"></h2>
+    <ul id="t-nl"></ul>
+  </div>
+</div>
+<script>
+{
+const T={
+ es:{how:'Toca para aletear. Mantén presionado para flotar (gasta néctar). Atraviesa las flores para recargar.',tap:'Toca para empezar',best:'Récord: ',over:'¡Ay, chocaste!',again:'Otra vez',share:'Copiar puntuación',copied:'¡Copiado! Pégalo en WhatsApp',nocopy:'No se pudo copiar',proto:'Prototipo v0.6 · para pruebas',nectar:'néctar',mute:'Silenciar',unmute:'Activar sonido',
+  nh:'Para los probadores',nl:['Juega al menos 5 partidas.','¿Es muy fácil o muy difícil?','¿Usaste el truco de flotar?','¿Qué pájaro o nivel te gustaría desbloquear?'],
+  msg:s=>`¡Saqué ${s} en Colibrí Dash! 🐦 ¿Me ganas?`},
+ en:{how:'Tap to flap. Hold to hover (uses nectar). Fly through flowers to refill.',tap:'Tap to start',best:'Best: ',over:'Ouch, you crashed!',again:'Play again',share:'Copy score',copied:'Copied! Paste it in WhatsApp',nocopy:'Could not copy',proto:'Prototype v0.6 · for testing',nectar:'nectar',mute:'Mute',unmute:'Unmute',
+  nh:'For testers',nl:['Play at least 5 rounds.','Is it too easy or too hard?','Did you use the hover trick?','What bird or level would you want to unlock?'],
+  msg:s=>`I scored ${s} in Colibrí Dash! 🐦 Can you beat me?`},
+ pt:{how:'Toque para bater as asas. Segure para pairar (gasta néctar). Passe pelas flores para recarregar.',tap:'Toque para começar',best:'Recorde: ',over:'Ai, você bateu!',again:'Jogar de novo',share:'Copiar pontuação',copied:'Copiado! Cole no WhatsApp',nocopy:'Não foi possível copiar',proto:'Protótipo v0.6 · para testes',nectar:'néctar',mute:'Silenciar',unmute:'Ativar som',
+  nh:'Para os testadores',nl:['Jogue pelo menos 5 partidas.','Está fácil ou difícil demais?','Você usou o truque de pairar?','Que pássaro ou fase você gostaria de desbloquear?'],
+  msg:s=>`Fiz ${s} pontos no Colibrí Dash! 🐦 Consegue me superar?`},
+ fr:{how:'Touche pour battre des ailes. Garde le doigt dessus pour faire du surplace (utilise du nectar). Passe dans les fleurs pour faire le plein.',tap:'Touche pour commencer',best:'Record : ',over:'Ayoye, collision!',again:'Rejouer',share:'Copier le pointage',copied:'Copié! Colle-le dans WhatsApp',nocopy:'Impossible de copier',proto:'Prototype v0.6 · pour les tests',nectar:'nectar',mute:'Couper le son',unmute:'Activer le son',
+  nh:'Pour les testeurs',nl:['Joue au moins 5 parties.','Est-ce trop facile ou trop difficile?','As-tu utilisé le truc du surplace?','Quel oiseau ou niveau aimerais-tu débloquer?'],
+  msg:s=>`J'ai fait ${s} points à Colibrí Dash! 🐦 Capable de me battre?`},
+ it:{how:'Tocca per sbattere le ali. Tieni premuto per restare sospeso (consuma nettare). Passa tra i fiori per ricaricare.',tap:'Tocca per iniziare',best:'Record: ',over:'Ahi, che botta!',again:'Gioca ancora',share:'Copia punteggio',copied:'Copiato! Incollalo su WhatsApp',nocopy:'Impossibile copiare',proto:'Prototipo v0.6 · per i test',nectar:'nettare',mute:'Disattiva audio',unmute:'Attiva audio',
+  nh:'Per i tester',nl:['Gioca almeno 5 partite.','È troppo facile o troppo difficile?','Hai usato il trucco del volo sospeso?','Quale uccello o livello vorresti sbloccare?'],
+  msg:s=>`Ho fatto ${s} punti a Colibrí Dash! 🐦 Riesci a battermi?`},
+ id:{how:'Ketuk untuk mengepakkan sayap. Tahan untuk melayang (memakai nektar). Terbang melewati bunga untuk mengisi ulang.',tap:'Ketuk untuk mulai',best:'Rekor: ',over:'Aduh, kamu menabrak!',again:'Main lagi',share:'Salin skor',copied:'Tersalin! Tempel di WhatsApp',nocopy:'Gagal menyalin',proto:'Prototipe v0.6 · untuk uji coba',nectar:'nektar',mute:'Matikan suara',unmute:'Nyalakan suara',
+  nh:'Untuk para penguji',nl:['Main minimal 5 kali.','Terlalu mudah atau terlalu sulit?','Apakah kamu memakai trik melayang?','Burung atau level apa yang ingin kamu buka?'],
+  msg:s=>`Aku dapat ${s} poin di Colibrí Dash! 🐦 Bisa kalahkan aku?`},
+ hi:{how:'पंख फड़फड़ाने के लिए टैप करें। हवा में रुकने के लिए दबाकर रखें (रस खर्च होता है)। रस भरने के लिए फूलों के बीच से उड़ें।',tap:'शुरू करने के लिए टैप करें',best:'रिकॉर्ड: ',over:'अरे, आप टकरा गए!',again:'फिर से खेलें',share:'स्कोर कॉपी करें',copied:'कॉपी हो गया! WhatsApp में पेस्ट करें',nocopy:'कॉपी नहीं हो सका',proto:'प्रोटोटाइप v0.6 · टेस्टिंग के लिए',nectar:'रस',mute:'आवाज़ बंद करें',unmute:'आवाज़ चालू करें',
+  nh:'टेस्टर्स के लिए',nl:['कम से कम 5 बार खेलें।','क्या यह बहुत आसान है या बहुत मुश्किल?','क्या आपने हवा में रुकने की ट्रिक इस्तेमाल की?','आप कौन-सा पक्षी या लेवल अनलॉक करना चाहेंगे?'],
+  msg:s=>`मैंने Colibrí Dash में ${s} अंक बनाए! 🐦 क्या आप मुझे हरा सकते हैं?`},
+ nah:{how:'Xictzotzona ic tipatlaniz. Xicpiya ic timoquetzaz ilhuicac (quipolohua xochinecutli). Xipatlani ipan xochimeh ic ticuiz xochinecutli.',tap:'Xictzotzona ic tipehuaz',best:'Tlapanahuia: ',over:'Ayyo, otihuetz!',again:'Occeppa',share:'Tlapohualli 📋',copied:'Ye onca! Xictlali ipan WhatsApp',nocopy:'Amo huel',proto:'Prototipo v0.6 · ic tlayeyecoliztli',nectar:'xochinecutli',mute:'Amo tlacaquiztli',unmute:'Tlacaquiztli',
+  nh:'Ic tlayeyecoanimeh',nl:['Xiahahui macuilpa noso ocachi.','Cuix huel ohui noso amo ohui?','Cuix otimoquetz ilhuicac ica xochinecutli?','Catlehhuatl tototl noso tlalli ticnequi?'],
+  msg:s=>`Niquinpia ${s} ipan Colibrí Dash! 🐦 Cuix huel tinechpanahuiz?`},
+ de:{how:'Tippe, um mit den Flügeln zu schlagen. Halte gedrückt, um zu schweben (verbraucht Nektar). Flieg durch Blumen, um aufzutanken.',tap:'Tippe zum Starten',best:'Rekord: ',over:'Autsch, Bruchlandung!',again:'Nochmal spielen',share:'Punkte kopieren',copied:'Kopiert! Füge es in WhatsApp ein',nocopy:'Kopieren nicht möglich',proto:'Prototyp v0.6 · zum Testen',nectar:'Nektar',mute:'Ton aus',unmute:'Ton an',
+  nh:'Für Tester',nl:['Spiel mindestens 5 Runden.','Ist es zu leicht oder zu schwer?','Hast du den Schwebe-Trick benutzt?','Welchen Vogel oder welches Level möchtest du freischalten?'],
+  msg:s=>`Ich habe ${s} Punkte in Colibrí Dash! 🐦 Schaffst du mehr?`},
+ fil:{how:'I-tap para pumagaspas. Pindutin nang matagal para lumutang (gumagamit ng nektar). Lumipad sa mga bulaklak para mag-recharge.',tap:'I-tap para magsimula',best:'Record: ',over:'Aray, bumangga ka!',again:'Maglaro ulit',share:'Kopyahin ang score',copied:'Nakopya na! I-paste sa WhatsApp',nocopy:'Hindi makopya',proto:'Prototype v0.6 · para sa testing',nectar:'nektar',mute:'I-mute',unmute:'I-unmute',
+  nh:'Para sa mga tester',nl:['Maglaro nang hindi bababa sa 5 beses.','Masyado bang madali o masyadong mahirap?','Nagamit mo ba ang trick na paglutang?','Anong ibon o level ang gusto mong i-unlock?'],
+  msg:s=>`Naka-${s} ako sa Colibrí Dash! 🐦 Kaya mo ba akong talunin?`},
+ sw:{how:'Gusa ili kupiga mabawa. Shikilia ili kuelea (inatumia nekta). Ruka kupitia maua ili kujaza tena.',tap:'Gusa ili kuanza',best:'Rekodi: ',over:'Lo! Umegonga!',again:'Cheza tena',share:'Nakili alama',copied:'Imenakiliwa! Ibandike kwenye WhatsApp',nocopy:'Imeshindwa kunakili',proto:'Mfano v0.6 · kwa majaribio',nectar:'nekta',mute:'Zima sauti',unmute:'Washa sauti',
+  nh:'Kwa wanaojaribu',nl:['Cheza angalau mara 5.','Je, ni rahisi sana au ngumu sana?','Ulitumia mbinu ya kuelea?','Ungependa kufungua ndege au kiwango gani?'],
+  msg:s=>`Nimepata alama ${s} kwenye Colibrí Dash! 🐦 Unaweza kunishinda?`},
+ ja:{how:'タップで羽ばたく。長押しでホバリング（蜜を使う）。花をくぐって蜜を補給しよう。',tap:'タップでスタート',best:'ベスト：',over:'あっ、ぶつかった！',again:'もう一度',share:'スコアをコピー',copied:'コピーしました！LINEやWhatsAppに貼り付けてね',nocopy:'コピーできませんでした',proto:'プロトタイプ v0.6 · テスト用',nectar:'蜜',mute:'ミュート',unmute:'ミュート解除',
+  nh:'テスターの皆さんへ',nl:['5回以上プレイしてね。','簡単すぎる？難しすぎる？','ホバリングは使った？','どんな鳥やステージを解放したい？'],
+  msg:s=>`Colibrí Dashで${s}点取ったよ！🐦 勝てるかな？`},
+ zh:{how:'点击拍动翅膀。长按悬停（消耗花蜜）。穿过花朵补充花蜜。',tap:'点击开始',best:'最高分：',over:'哎呀，撞到了！',again:'再玩一次',share:'复制分数',copied:'已复制！粘贴到微信或 WhatsApp',nocopy:'无法复制',proto:'原型 v0.6 · 测试版',nectar:'花蜜',mute:'静音',unmute:'取消静音',
+  nh:'致测试玩家',nl:['至少玩 5 局。','太简单还是太难？','你用过悬停技巧吗？','你想解锁什么鸟或关卡？'],
+  msg:s=>`我在 Colibrí Dash 里得了 ${s} 分！🐦 你能超过我吗？`},
+ yua:{how:"Péech' utia'al a xik'nal. Ma'ach utia'al a p'áatal ich ka'an (ku xu'ulul u kaabil lool). Xik'nal ichil le loolo'obo' utia'al a ch'a'ik kaab.",tap:"Péech' utia'al a káajal",best:"Asab ma'alob: ",over:"Ay, lúubech!",again:"Tu ka'aten",share:"Puntos 📋",copied:"Ts'o'ok! Ts'áa ti' WhatsApp",nocopy:"Ma' páajchaj",proto:"Prototipo v0.6 · utia'al u yiláal",nectar:"kaabil lool",mute:"Ma' juum",unmute:"Juum",
+  nh:"Ti' le máaxo'ob ku yilko'ob",nl:["Báaxtal jo'op'éel téen.","¿Jach chen wa jach talam?","¿Ta meentaj wa a p'áatal ich ka'an?","¿Ba'ax ch'íich' wa ba'ax kaaj a k'áat?"],
+  msg:s=>`Tin ch'a'aj ${s} ich Colibrí Dash! 🐦 ¿Je'el a páajtal a máanselen?`}
+};
+let lang='es';
+try{lang=localStorage.getItem('cd-lang')||''}catch(e){}
+if(!T[lang]){const nl=(navigator.language||'').toLowerCase().split('-')[0];lang={pt:'pt',fr:'fr',it:'it',id:'id',in:'id',hi:'hi',de:'de',fil:'fil',tl:'fil',sw:'sw',ja:'ja',zh:'zh'}[nl]||'es'}
+let best=0;try{best=+localStorage.getItem('cd-best')||0}catch(e){}
+const $=id=>document.getElementById(id);
+const X={"es": {"lb": "Tabla de récords", "week": "Esta semana", "all": "Siempre", "nick": "Tu apodo", "save": "Guardar", "saved": "¡Guardado!", "err": "Sin conexión, intenta de nuevo", "empty": "Aún no hay récords. ¡Sé el primero!", "group": "Código de grupo (opcional)", "world": "Todos", "close": "Cerrar"}, "en": {"lb": "Leaderboard", "week": "This week", "all": "All time", "nick": "Your nickname", "save": "Save", "saved": "Saved!", "err": "Couldn't connect, try again", "empty": "No scores yet. Be the first!", "group": "Group code (optional)", "world": "Everyone", "close": "Close"}, "pt": {"lb": "Ranking", "week": "Esta semana", "all": "Geral", "nick": "Seu apelido", "save": "Salvar", "saved": "Salvo!", "err": "Sem conexão, tente de novo", "empty": "Ainda não há pontuações. Seja o primeiro!", "group": "Código do grupo (opcional)", "world": "Todos", "close": "Fechar"}, "fr": {"lb": "Classement", "week": "Cette semaine", "all": "Depuis le début", "nick": "Ton surnom", "save": "Enregistrer", "saved": "Enregistré!", "err": "Pas de connexion, réessaie", "empty": "Aucun pointage pour l’instant. Sois le premier!", "group": "Code de groupe (facultatif)", "world": "Tout le monde", "close": "Fermer"}, "it": {"lb": "Classifica", "week": "Questa settimana", "all": "Di sempre", "nick": "Il tuo nickname", "save": "Salva", "saved": "Salvato!", "err": "Connessione assente, riprova", "empty": "Ancora nessun punteggio. Sii il primo!", "group": "Codice gruppo (facoltativo)", "world": "Tutti", "close": "Chiudi"}, "de": {"lb": "Bestenliste", "week": "Diese Woche", "all": "Allzeit", "nick": "Dein Spitzname", "save": "Speichern", "saved": "Gespeichert!", "err": "Keine Verbindung – versuch es nochmal", "empty": "Noch keine Punkte. Sei der Erste!", "group": "Gruppencode (optional)", "world": "Alle", "close": "Schließen"}, "id": {"lb": "Papan skor", "week": "Minggu ini", "all": "Sepanjang masa", "nick": "Nama panggilanmu", "save": "Simpan", "saved": "Tersimpan!", "err": "Gagal terhubung, coba lagi", "empty": "Belum ada skor. Jadilah yang pertama!", "group": "Kode grup (opsional)", "world": "Semua", "close": "Tutup"}, "fil": {"lb": "Leaderboard", "week": "Ngayong linggo", "all": "Lahat ng panahon", "nick": "Palayaw mo", "save": "I-save", "saved": "Na-save!", "err": "Walang koneksyon, subukan ulit", "empty": "Wala pang score. Mauna ka na!", "group": "Group code (opsyonal)", "world": "Lahat", "close": "Isara"}, "sw": {"lb": "Ubao wa washindi", "week": "Wiki hii", "all": "Wakati wote", "nick": "Jina lako la utani", "save": "Hifadhi", "saved": "Imehifadhiwa!", "err": "Hakuna muunganisho, jaribu tena", "empty": "Bado hakuna alama. Kuwa wa kwanza!", "group": "Msimbo wa kikundi (si lazima)", "world": "Wote", "close": "Funga"}, "hi": {"lb": "लीडरबोर्ड", "week": "इस हफ़्ते", "all": "अब तक", "nick": "आपका उपनाम", "save": "सेव करें", "saved": "सेव हो गया!", "err": "कनेक्ट नहीं हो सका, फिर कोशिश करें", "empty": "अभी कोई स्कोर नहीं। पहले बनें!", "group": "ग्रुप कोड (वैकल्पिक)", "world": "सभी", "close": "बंद करें"}, "ja": {"lb": "ランキング", "week": "今週", "all": "歴代", "nick": "ニックネーム", "save": "保存", "saved": "保存しました！", "err": "接続できません。もう一度試してね", "empty": "まだスコアがありません。一番乗りしよう！", "group": "グループコード（任意）", "world": "全員", "close": "閉じる"}, "zh": {"lb": "排行榜", "week": "本周", "all": "总榜", "nick": "你的昵称", "save": "保存", "saved": "已保存！", "err": "连接失败，请重试", "empty": "还没有分数，快来抢第一！", "group": "群组代码（可选）", "world": "全部", "close": "关闭"}};
+const FB={nah:'es',yua:'es'};
+function tx(){return Object.assign({},T.en,X[FB[lang]||'en'],T[lang],X[lang]||{})}
+// --- leaderboard (Supabase) ---
+const SB='https://pcbublrlrudzhquldtrk.supabase.co/rest/v1/scores',KEY='sb_publishable_r5MCstfovgD-2-r5-hoqlg_jEi1LUKu';
+let group='',nick='',lbMode='week';
+try{group=localStorage.getItem('cd-group')||'';nick=localStorage.getItem('cd-nick')||''}catch(e){}
+{const qg=new URLSearchParams(location.search).get('g');if(qg&&/^[A-Z0-9]{3,12}$/i.test(qg)){group=qg.toUpperCase();try{localStorage.setItem('cd-group',group)}catch(e){}}}
+function weekStart(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.toISOString()}
+async function fetchBoard(){
+ let q='?select=nickname,score&order=score.desc,created_at.asc&limit=60&group_code='+(group?'eq.'+group:'is.null');
+ if(lbMode==='week')q+='&created_at=gte.'+encodeURIComponent(weekStart());
+ const r=await fetch(SB+q,{headers:{apikey:KEY}});if(!r.ok)throw new Error(r.status);
+ const seen=new Set(),out=[];for(const x of await r.json()){const k=String(x.nickname).toLowerCase();if(seen.has(k))continue;seen.add(k);out.push(x);if(out.length===10)break}
+ return out}
+function msgLi(t){const e=document.createElement('li');e.className='msg';e.textContent=t;return e}
+async function renderBoard(){
+ const L=tx(),ol=$('lbList');ol.replaceChildren(msgLi('…'));
+ try{const rows=await fetchBoard();ol.replaceChildren();if(!rows.length){ol.append(msgLi(L.empty));return}
+  rows.forEach((x,i)=>{const e=document.createElement('li');if(nick&&String(x.nickname).toLowerCase()===nick.toLowerCase())e.className='me';
+   const r=document.createElement('span');r.className='r';r.textContent=['🥇','🥈','🥉'][i]||String(i+1);
+   const n=document.createElement('span');n.className='n';n.textContent=x.nickname;
+   const sc=document.createElement('span');sc.textContent=x.score;e.append(r,n,sc);ol.append(e)})}
+ catch(e){ol.replaceChildren(msgLi(L.err))}}
+function boardLabels(){const L=tx();$('lbGroupLabel').textContent=group?'👥 '+group:'🌎 '+L.world;$('tabW').setAttribute('aria-pressed',lbMode==='week');$('tabA').setAttribute('aria-pressed',lbMode==='all')}
+function openBoard(){$('lbp').classList.remove('hide');$('gcode').value=group;boardLabels();renderBoard();$('lbClose').focus()}
+function closeBoard(){$('lbp').classList.add('hide')}
+
+// --- sound (synthesized, no files) ---
+let AC=null,muted=false,humO=null,humG=null;
+try{muted=localStorage.getItem('cd-mute')==='1'}catch(e){}
+function ac(){if(!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC&&AC.state==='suspended')AC.resume();return AC}
+function tone(f,f2,dur,type,vol,delay=0){const a=ac();if(!a||muted)return;const t=a.currentTime+delay,o=a.createOscillator(),g=a.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+dur);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g).connect(a.destination);o.start(t);o.stop(t+dur+0.02)}
+const sfx={
+ flap(){tone(260,140,0.08,'sawtooth',0.045);tone(520,300,0.05,'triangle',0.03)},
+ chime(){[1046,1318,1568].forEach((f,i)=>tone(f,0,0.35,'sine',0.12,i*0.06))},
+ crash(){const a=ac();if(!a||muted)return;const t=a.currentTime,n=a.sampleRate*0.35|0,b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n)**2;const s=a.createBufferSource(),g=a.createGain(),f=a.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(2000,t);f.frequency.exponentialRampToValueAtTime(200,t+0.3);g.gain.value=0.35;s.buffer=b;s.connect(f).connect(g).connect(a.destination);s.start(t);tone(200,50,0.45,'square',0.09)}
+};
+function hum(on){const a=AC;if(!a)return;
+ if(on&&!muted&&!humO){humO=a.createOscillator();humG=a.createGain();const l=a.createOscillator(),lg=a.createGain(),f=a.createBiquadFilter();humO.type='sawtooth';humO.frequency.value=120;l.frequency.value=38;lg.gain.value=0.025;humG.gain.value=0.03;f.type='lowpass';f.frequency.value=900;l.connect(lg).connect(humG.gain);humO.connect(f).connect(humG).connect(a.destination);humO.start();l.start();humO._l=l}
+ else if((!on||muted)&&humO){const t=a.currentTime;humG.gain.cancelScheduledValues(t);humG.gain.setTargetAtTime(0,t,0.03);humO.stop(t+0.15);humO._l.stop(t+0.15);humO=null}}
+function updMute(){const b=$('mute');b.textContent=muted?'🔇':'🔊';b.setAttribute('aria-label',muted?T[lang].unmute:T[lang].mute);b.title=b.getAttribute('aria-label');b.setAttribute('aria-pressed',muted)}
+function applyLang(){
+ const L=T[lang];document.documentElement.lang={pt:'pt-BR',fr:'fr-CA',zh:'zh-Hans'}[lang]||lang;
+ $('t-how').textContent=L.how;$('t-tap').textContent=L.tap;
+ $('t-best').textContent=best?L.best+best:'';$('t-best2').textContent=L.best+best;
+ $('t-over').textContent=L.over;$('again').textContent=L.again;$('share').textContent=L.share;
+ $('t-proto').textContent=L.proto;{const Q=tx();$('saveBtn').textContent=Q.save;$('nick').placeholder=Q.nick;$('nick').setAttribute('aria-label',Q.nick);$('lbBtn').textContent='🏆 '+Q.lb;$('trophy').setAttribute('aria-label',Q.lb);$('trophy').title=Q.lb;$('lbTitle').textContent='🏆 '+Q.lb;$('tabW').textContent=Q.week;$('tabA').textContent=Q.all;$('t-group').textContent=Q.group;$('lbClose').textContent=Q.close;boardLabels()}updMute();$('lang').value=lang;$('t-nh').textContent=L.nh;
+ $('t-nl').innerHTML=L.nl.map(x=>`<li>${x}</li>`).join('');
+}
+applyLang();
+
+const W=360,H=640,GROUND=H-64;
+const cv=$('c'),ctx=cv.getContext('2d'),game=$('game');
+function size(){const r=game.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(cv.width/W,0,0,cv.height/H,0,0)}
+const ro=new ResizeObserver(size);ro.observe(game);
+
+const GRAV=1050,FLAP=-340,MAXFALL=430,PW=58,FLAGS=['#ff3d8b','#ffb53b','#27c1d9','#8f5cff','#3ccf6e','#ff6b3d'];
+let state='ready',bird,pipes,flowers,score,speed,spawnT,nectar,holding=false,holdT=0,time=0,shake=0,last=0;
+const far=Array.from({length:14},(_,i)=>({x:i*48,h:40+((i*37)%50),dome:i%4===1}));
+function reset(){bird={x:95,y:H*0.42,vy:0,rot:0};pipes=[];flowers=0;score=0;speed=105;spawnT=1.6;nectar=1}
+reset();
+
+function spawn(){
+ const gap=Math.max(140,178-score*1.6);
+ const cy=150+Math.random()*(GROUND-300);
+ pipes.push({x:W+10,cy,gap,base:cy,amp:score>=10?18+Math.min(score,30):0,ph:Math.random()*6,scored:false,
+  fl:{y:cy+(Math.random()-0.5)*gap*0.4,got:false},cactusArms:Math.random()<0.5});
+}
+function flap(){
+ if(state==='ready'){state='play';$('start').classList.add('hide')}
+ if(state!=='play')return;
+ bird.vy=FLAP;holding=true;holdT=0;sfx.flap();
+}
+function release(){holding=false}
+function die(){
+ if(state==='over')return;
+ state='over';shake=0.35;hum(false);sfx.crash();
+ if(score>best){best=score;try{localStorage.setItem('cd-best',best)}catch(e){}}
+ $('final').textContent=score;$('saveBox').classList.toggle('hide',score<1);$('saveBtn').disabled=false;$('nick').value=nick;applyLang();
+ setTimeout(()=>$('over').classList.remove('hide'),450);
+}
+const UI='button,input,.lbp,.save';
+game.addEventListener('touchstart',e=>{if(e.target.closest(UI))return;e.preventDefault();flap()},{passive:false});
+game.addEventListener('touchend',e=>{if(e.target.closest(UI))return;e.preventDefault();if(e.touches.length===0)release()},{passive:false});
+game.addEventListener('touchcancel',release);
+game.addEventListener('pointerdown',e=>{if(e.pointerType==='touch'||e.target.closest(UI))return;e.preventDefault();flap()});
+addEventListener('pointerup',e=>{if(e.pointerType!=='touch')release()});
+const typing=e=>e.target&&e.target.closest&&e.target.closest('input,select');
+addEventListener('keydown',e=>{if(typing(e)||!$('lbp').classList.contains('hide'))return;if(e.code==='Space'||e.code==='ArrowUp'){e.preventDefault();if(!e.repeat){if(state==='over')restart();else flap()}}});
+addEventListener('keyup',e=>{if(e.code==='Space'||e.code==='ArrowUp')release()});
+function restart(){reset();state='ready';$('over').classList.add('hide');$('start').classList.remove('hide');applyLang()}
+$('again').addEventListener('click',restart);
+$('lang').addEventListener('change',e=>{lang=e.target.value;try{localStorage.setItem('cd-lang',lang)}catch(err){}applyLang()});
+$('mute').addEventListener('click',()=>{muted=!muted;try{localStorage.setItem('cd-mute',muted?'1':'')}catch(e){}if(muted)hum(false);else ac();updMute()});
+addEventListener('keydown',e=>{if(typing(e))return;if(e.code==='KeyM'){$('mute').click()}});
+addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('lbp').classList.contains('hide'))closeBoard()});
+// --- leaderboard wiring ---
+async function saveScore(){
+ const n=$('nick').value.replace(/[<>]/g,'').replace(/\s+/g,' ').trim().slice(0,16);if(!n){$('nick').focus();return}
+ nick=n;try{localStorage.setItem('cd-nick',n)}catch(e){}
+ const b=$('saveBtn');b.disabled=true;
+ try{const r=await fetch(SB,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json',Prefer:'return=minimal'},
+   body:JSON.stringify({nickname:n,score:Math.min(score,999),flowers:Math.min(flowers,999),lang,group_code:group||null})});
+  if(!r.ok)throw new Error(r.status);toast(tx().saved);$('saveBox').classList.add('hide');openBoard()}
+ catch(e){b.disabled=false;toast(tx().err)}}
+$('saveBtn').addEventListener('click',saveScore);
+$('nick').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveScore()}});
+$('trophy').addEventListener('click',openBoard);
+$('lbBtn').addEventListener('click',openBoard);
+$('lbClose').addEventListener('click',closeBoard);
+$('tabW').addEventListener('click',()=>{lbMode='week';boardLabels();renderBoard()});
+$('tabA').addEventListener('click',()=>{lbMode='all';boardLabels();renderBoard()});
+$('gcode').addEventListener('change',e=>{const v=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);group=v.length>=3?v:'';e.target.value=group;try{localStorage.setItem('cd-group',group)}catch(err){}boardLabels();renderBoard()});
+let toastT;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1800)}
+$('share').addEventListener('click',async()=>{try{const link=/^https?:$/.test(location.protocol)?' '+location.origin+location.pathname+(group?'?g='+group:''):'';await navigator.clipboard.writeText(T[lang].msg(score)+link);toast(T[lang].copied)}catch(e){toast(T[lang].nocopy)}});
+
+function update(dt){
+ time+=dt;if(shake>0)shake-=dt;
+ if(state==='ready'){bird.y=H*0.42+Math.sin(time*3)*10;return}
+ if(state==='over'){if(bird.y<GROUND-12){bird.vy+=GRAV*dt;bird.y+=bird.vy*dt;bird.rot=Math.min(bird.rot+dt*6,1.4)}return}
+ if(holding)holdT+=dt;
+ const hovering=holding&&holdT>0.25&&nectar>0;
+ if(hovering){bird.vy*=Math.pow(0.02,dt);nectar=Math.max(0,nectar-dt)}
+ else{bird.vy=Math.min(MAXFALL,bird.vy+GRAV*dt);nectar=Math.min(1,nectar+dt*0.04)}
+ bird.y+=bird.vy*dt;
+ bird.rot=hovering?0:Math.max(-0.4,Math.min(0.6,bird.vy/800));
+ bird.hover=hovering;hum(hovering);
+ speed=105+Math.min(score,50)*2;
+ spawnT-=dt;if(spawnT<=0){spawn();spawnT=230/speed}
+ for(const p of pipes){
+  p.x-=speed*dt;
+  if(p.amp){p.cy=p.base+Math.sin(time*1.8+p.ph)*p.amp;p.cy=Math.max(110,Math.min(GROUND-110,p.cy))}
+  if(!p.scored&&p.x+PW<bird.x){p.scored=true;score++}
+  const fx=p.x+PW/2,fy=p.fl.y-p.base+p.cy;
+  if(!p.fl.got&&Math.hypot(fx-bird.x,fy-bird.y)<26){p.fl.got=true;flowers++;score++;nectar=Math.min(1,nectar+0.4);sfx.chime()}
+  const top=p.cy-p.gap/2,bot=p.cy+p.gap/2,r=11;
+  if(bird.x+r>p.x+4&&bird.x-r<p.x+PW-4&&(bird.y-r<top||bird.y+r>bot))die();
+ }
+ pipes=pipes.filter(p=>p.x>-PW-40);
+ if(bird.y>GROUND-12){bird.y=GROUND-12;die()}
+ if(bird.y<-30){bird.y=-30;bird.vy=0}
+}
+
+function rr(x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r)}
+function drawBg(){
+ const g=ctx.createLinearGradient(0,0,0,GROUND);
+ g.addColorStop(0,'#3b1462');g.addColorStop(.45,'#b0307a');g.addColorStop(.8,'#ff7a45');g.addColorStop(1,'#ffc24b');
+ ctx.fillStyle=g;ctx.fillRect(0,0,W,GROUND);
+ ctx.fillStyle='#ffe9a6';ctx.globalAlpha=.9;ctx.beginPath();ctx.arc(250,GROUND-150,46,0,7);ctx.fill();ctx.globalAlpha=1;
+ ctx.fillStyle='#fff';for(let i=0;i<22;i++){const sx=(i*97)%W,sy=(i*53)%180+10;ctx.globalAlpha=.35+.3*Math.sin(time*2+i);ctx.fillRect(sx,sy,2,2)}ctx.globalAlpha=1;
+ const off=(time*speed*0.25)%(14*48);
+ ctx.fillStyle='#5a1f5e';
+ for(let k=0;k<2;k++)for(const b of far){
+  const x=b.x-off+k*14*48;if(x<-60||x>W+10)continue;
+  ctx.fillRect(x,GROUND-b.h-30,44,b.h+30);
+  if(b.dome){ctx.beginPath();ctx.arc(x+22,GROUND-b.h-30,16,Math.PI,0);ctx.fill();ctx.fillRect(x+20,GROUND-b.h-62,4,18)}
+  ctx.fillStyle='#ffd36b';ctx.globalAlpha=.8;ctx.fillRect(x+8,GROUND-b.h-10,6,8);ctx.fillRect(x+28,GROUND-b.h+8,6,8);ctx.globalAlpha=1;ctx.fillStyle='#5a1f5e';
+ }
+ ctx.fillStyle='#c2563a';ctx.fillRect(0,GROUND,W,H-GROUND);
+ ctx.fillStyle='#e07a4f';ctx.fillRect(0,GROUND,W,8);
+ const goff=(time*speed)%40;ctx.fillStyle='#a8452f';
+ for(let x=-goff;x<W;x+=40)ctx.fillRect(x,GROUND+20,22,6);
+}
+function drawPapel(p){
+ const top=p.cy-p.gap/2;
+ ctx.fillStyle='#3a1a1a';ctx.fillRect(p.x+PW/2-1.5,0,3,top);
+ let i=Math.floor(p.ph*3);
+ for(let y=top-34;y>-34;y-=34){
+  const c=FLAGS[i++%FLAGS.length],sw=Math.sin(time*3+y*0.05+p.ph)*2;
+  ctx.fillStyle=c;ctx.beginPath();ctx.moveTo(p.x+sw,y);ctx.lineTo(p.x+PW+sw,y);ctx.lineTo(p.x+PW+sw,y+26);
+  for(let k=5;k>=0;k--)ctx.lineTo(p.x+sw+k*PW/6+(k?PW/12:0)*0,y+(k%2?30:26));
+  ctx.closePath();ctx.fill();
+  ctx.fillStyle='#0003';for(let k=0;k<3;k++){ctx.beginPath();ctx.arc(p.x+sw+12+k*17,y+12,3.5,0,7);ctx.fill()}
+ }
+ ctx.fillStyle='#3a1a1a';rr(p.x-4,top-6,PW+8,8,4);ctx.fill();
+}
+function drawCactus(p){
+ const bot=p.cy+p.gap/2,x=p.x+6,w=PW-12;
+ ctx.fillStyle='#1f7a45';rr(x,bot,w,GROUND-bot+10,w/2);ctx.fill();
+ ctx.fillStyle='#2e9e5b';rr(x+6,bot+4,w-18,GROUND-bot,12);ctx.fill();
+ ctx.strokeStyle='#17603a';ctx.lineWidth=2;
+ for(let k=1;k<3;k++){ctx.beginPath();ctx.moveTo(x+k*w/3,bot+16);ctx.lineTo(x+k*w/3,GROUND);ctx.stroke()}
+ if(p.cactusArms&&GROUND-bot>120){
+  ctx.fillStyle='#1f7a45';const ay=bot+60;
+  rr(x-14,ay,14,12,6);ctx.fill();rr(x-14,ay-30,12,42,6);ctx.fill();
+  rr(x+w,ay+30,14,12,6);ctx.fill();rr(x+w+2,ay+4,12,38,6);ctx.fill();
+ }
+ ctx.fillStyle='#ff3d8b';ctx.beginPath();ctx.arc(x+w/2,bot+2,6,0,7);ctx.fill();
+}
+function drawFlower(p){
+ if(p.fl.got)return;
+ const x=p.x+PW/2,y=p.fl.y-p.base+p.cy,b=1+Math.sin(time*5+p.ph)*0.08;
+ ctx.save();ctx.translate(x,y);ctx.scale(b,b);
+ ctx.fillStyle='#ff3d8b';for(let k=0;k<6;k++){ctx.beginPath();ctx.ellipse(Math.cos(k*1.047)*8,Math.sin(k*1.047)*8,6,4,k*1.047,0,7);ctx.fill()}
+ ctx.fillStyle='#ffd23b';ctx.beginPath();ctx.arc(0,0,5,0,7);ctx.fill();ctx.restore();
+}
+function drawBird(){
+ ctx.save();ctx.translate(bird.x,bird.y);ctx.rotate(bird.rot);
+ const wf=Math.sin(time*(bird.hover?70:45));
+ ctx.fillStyle='#ffffff55';ctx.beginPath();ctx.ellipse(-3,-8,16,6+wf*4,-0.6,0,7);ctx.fill();
+ ctx.fillStyle='#1fa37a';ctx.beginPath();ctx.ellipse(0,0,15,10,0,0,7);ctx.fill();
+ ctx.fillStyle='#0f6e5a';ctx.beginPath();ctx.moveTo(-12,0);ctx.lineTo(-24,-4);ctx.lineTo(-22,6);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#e8234a';ctx.beginPath();ctx.ellipse(7,5,6,4,0.3,0,7);ctx.fill();
+ ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(8,-3,3.4,0,7);ctx.fill();
+ ctx.fillStyle='#111';ctx.beginPath();ctx.arc(9,-3,1.8,0,7);ctx.fill();
+ ctx.strokeStyle='#2a1a1a';ctx.lineWidth=2.2;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(14,-1);ctx.lineTo(30,1);ctx.stroke();
+ ctx.fillStyle='#66e3b4';ctx.beginPath();ctx.ellipse(-2,-5+wf*3,11,4,-0.4+wf*0.5,0,7);ctx.fill();
+ ctx.restore();
+}
+function drawHud(){
+ if(state==='ready')return;
+ ctx.textAlign='center';ctx.font='48px "Lilita One",sans-serif';
+ ctx.fillStyle='#7a1e6b';ctx.fillText(score,W/2,74);ctx.fillStyle='#fff';ctx.fillText(score,W/2,70);
+ ctx.fillStyle='#0006';rr(16,GROUND+24,120,14,7);ctx.fill();
+ ctx.fillStyle=nectar>0.25?'#ffd23b':'#ff3d8b';rr(18,GROUND+26,116*nectar,10,5);ctx.fill();
+ ctx.textAlign='left';ctx.font='800 12px Nunito,"Baloo 2",sans-serif';ctx.fillStyle='#fff';
+ ctx.fillText(T[lang].nectar,146,GROUND+36);
+ ctx.textAlign='right';ctx.fillText('🌸 '+flowers,W-16,GROUND+36);
+}
+function frame(t){
+ const dt=Math.min(0.033,(t-(last||t))/1000);last=t;
+ update(dt);
+ ctx.save();
+ if(shake>0)ctx.translate((Math.random()-.5)*8*shake/.35,(Math.random()-.5)*8*shake/.35);
+ drawBg();
+ for(const p of pipes){drawPapel(p);drawCactus(p);drawFlower(p)}
+ drawBird();ctx.restore();drawHud();
+ requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
