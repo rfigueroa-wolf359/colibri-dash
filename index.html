@@ -74,6 +74,7 @@ textarea::placeholder{color:#fff7ec99}
       <p id="t-how"></p>
       <p class="tap" id="t-tap"></p>
       <p id="t-best"></p>
+      <p id="t-chal" style="color:var(--sun);font-weight:800;margin-top:2px"></p>
     </div>
     <div class="ov hide" id="over">
       <p id="t-over" style="font:400 30px 'Lilita One','Baloo 2',sans-serif"></p>
@@ -122,46 +123,46 @@ textarea::placeholder{color:#fff7ec99}
 <script>
 {
 const T={
- es:{how:'Toca para aletear. Mantén presionado para flotar (gasta néctar). Atraviesa las flores para recargar.',tap:'Toca para empezar',best:'Récord: ',over:'¡Ay, chocaste!',again:'Otra vez',share:'Copiar puntuación',copied:'¡Copiado! Pégalo en WhatsApp',nocopy:'No se pudo copiar',proto:'Prototipo v1.0 · para pruebas',nectar:'néctar',mute:'Silenciar',unmute:'Activar sonido',
+ es:{how:'Toca para aletear. Mantén presionado para flotar (gasta néctar). Atraviesa las flores para recargar.',tap:'Toca para empezar',best:'Récord: ',over:'¡Ay, chocaste!',again:'Otra vez',share:'Copiar puntuación',copied:'¡Copiado! Pégalo en WhatsApp',nocopy:'No se pudo copiar',proto:'Prototipo v1.1 · para pruebas',nectar:'néctar',mute:'Silenciar',unmute:'Activar sonido',
   nh:'Para los probadores',nl:['Juega al menos 5 partidas.','¿Es muy fácil o muy difícil?','¿Usaste el truco de flotar?','¿Qué pájaro o nivel te gustaría desbloquear?'],
   msg:s=>`¡Saqué ${s} en Colibrí Dash! 🐦 ¿Me ganas?`},
- en:{how:'Tap to flap. Hold to hover (uses nectar). Fly through flowers to refill.',tap:'Tap to start',best:'Best: ',over:'Ouch, you crashed!',again:'Play again',share:'Copy score',copied:'Copied! Paste it in WhatsApp',nocopy:'Could not copy',proto:'Prototype v1.0 · for testing',nectar:'nectar',mute:'Mute',unmute:'Unmute',
+ en:{how:'Tap to flap. Hold to hover (uses nectar). Fly through flowers to refill.',tap:'Tap to start',best:'Best: ',over:'Ouch, you crashed!',again:'Play again',share:'Copy score',copied:'Copied! Paste it in WhatsApp',nocopy:'Could not copy',proto:'Prototype v1.1 · for testing',nectar:'nectar',mute:'Mute',unmute:'Unmute',
   nh:'For testers',nl:['Play at least 5 rounds.','Is it too easy or too hard?','Did you use the hover trick?','What bird or level would you want to unlock?'],
   msg:s=>`I scored ${s} in Colibrí Dash! 🐦 Can you beat me?`},
- pt:{how:'Toque para bater as asas. Segure para pairar (gasta néctar). Passe pelas flores para recarregar.',tap:'Toque para começar',best:'Recorde: ',over:'Ai, você bateu!',again:'Jogar de novo',share:'Copiar pontuação',copied:'Copiado! Cole no WhatsApp',nocopy:'Não foi possível copiar',proto:'Protótipo v1.0 · para testes',nectar:'néctar',mute:'Silenciar',unmute:'Ativar som',
+ pt:{how:'Toque para bater as asas. Segure para pairar (gasta néctar). Passe pelas flores para recarregar.',tap:'Toque para começar',best:'Recorde: ',over:'Ai, você bateu!',again:'Jogar de novo',share:'Copiar pontuação',copied:'Copiado! Cole no WhatsApp',nocopy:'Não foi possível copiar',proto:'Protótipo v1.1 · para testes',nectar:'néctar',mute:'Silenciar',unmute:'Ativar som',
   nh:'Para os testadores',nl:['Jogue pelo menos 5 partidas.','Está fácil ou difícil demais?','Você usou o truque de pairar?','Que pássaro ou fase você gostaria de desbloquear?'],
   msg:s=>`Fiz ${s} pontos no Colibrí Dash! 🐦 Consegue me superar?`},
- fr:{how:'Touche pour battre des ailes. Garde le doigt dessus pour faire du surplace (utilise du nectar). Passe dans les fleurs pour faire le plein.',tap:'Touche pour commencer',best:'Record : ',over:'Ayoye, collision!',again:'Rejouer',share:'Copier le pointage',copied:'Copié! Colle-le dans WhatsApp',nocopy:'Impossible de copier',proto:'Prototype v1.0 · pour les tests',nectar:'nectar',mute:'Couper le son',unmute:'Activer le son',
+ fr:{how:'Touche pour battre des ailes. Garde le doigt dessus pour faire du surplace (utilise du nectar). Passe dans les fleurs pour faire le plein.',tap:'Touche pour commencer',best:'Record : ',over:'Ayoye, collision!',again:'Rejouer',share:'Copier le pointage',copied:'Copié! Colle-le dans WhatsApp',nocopy:'Impossible de copier',proto:'Prototype v1.1 · pour les tests',nectar:'nectar',mute:'Couper le son',unmute:'Activer le son',
   nh:'Pour les testeurs',nl:['Joue au moins 5 parties.','Est-ce trop facile ou trop difficile?','As-tu utilisé le truc du surplace?','Quel oiseau ou niveau aimerais-tu débloquer?'],
   msg:s=>`J'ai fait ${s} points à Colibrí Dash! 🐦 Capable de me battre?`},
- it:{how:'Tocca per sbattere le ali. Tieni premuto per restare sospeso (consuma nettare). Passa tra i fiori per ricaricare.',tap:'Tocca per iniziare',best:'Record: ',over:'Ahi, che botta!',again:'Gioca ancora',share:'Copia punteggio',copied:'Copiato! Incollalo su WhatsApp',nocopy:'Impossibile copiare',proto:'Prototipo v1.0 · per i test',nectar:'nettare',mute:'Disattiva audio',unmute:'Attiva audio',
+ it:{how:'Tocca per sbattere le ali. Tieni premuto per restare sospeso (consuma nettare). Passa tra i fiori per ricaricare.',tap:'Tocca per iniziare',best:'Record: ',over:'Ahi, che botta!',again:'Gioca ancora',share:'Copia punteggio',copied:'Copiato! Incollalo su WhatsApp',nocopy:'Impossibile copiare',proto:'Prototipo v1.1 · per i test',nectar:'nettare',mute:'Disattiva audio',unmute:'Attiva audio',
   nh:'Per i tester',nl:['Gioca almeno 5 partite.','È troppo facile o troppo difficile?','Hai usato il trucco del volo sospeso?','Quale uccello o livello vorresti sbloccare?'],
   msg:s=>`Ho fatto ${s} punti a Colibrí Dash! 🐦 Riesci a battermi?`},
- id:{how:'Ketuk untuk mengepakkan sayap. Tahan untuk melayang (memakai nektar). Terbang melewati bunga untuk mengisi ulang.',tap:'Ketuk untuk mulai',best:'Rekor: ',over:'Aduh, kamu menabrak!',again:'Main lagi',share:'Salin skor',copied:'Tersalin! Tempel di WhatsApp',nocopy:'Gagal menyalin',proto:'Prototipe v1.0 · untuk uji coba',nectar:'nektar',mute:'Matikan suara',unmute:'Nyalakan suara',
+ id:{how:'Ketuk untuk mengepakkan sayap. Tahan untuk melayang (memakai nektar). Terbang melewati bunga untuk mengisi ulang.',tap:'Ketuk untuk mulai',best:'Rekor: ',over:'Aduh, kamu menabrak!',again:'Main lagi',share:'Salin skor',copied:'Tersalin! Tempel di WhatsApp',nocopy:'Gagal menyalin',proto:'Prototipe v1.1 · untuk uji coba',nectar:'nektar',mute:'Matikan suara',unmute:'Nyalakan suara',
   nh:'Untuk para penguji',nl:['Main minimal 5 kali.','Terlalu mudah atau terlalu sulit?','Apakah kamu memakai trik melayang?','Burung atau level apa yang ingin kamu buka?'],
   msg:s=>`Aku dapat ${s} poin di Colibrí Dash! 🐦 Bisa kalahkan aku?`},
- hi:{how:'पंख फड़फड़ाने के लिए टैप करें। हवा में रुकने के लिए दबाकर रखें (रस खर्च होता है)। रस भरने के लिए फूलों के बीच से उड़ें।',tap:'शुरू करने के लिए टैप करें',best:'रिकॉर्ड: ',over:'अरे, आप टकरा गए!',again:'फिर से खेलें',share:'स्कोर कॉपी करें',copied:'कॉपी हो गया! WhatsApp में पेस्ट करें',nocopy:'कॉपी नहीं हो सका',proto:'प्रोटोटाइप v1.0 · टेस्टिंग के लिए',nectar:'रस',mute:'आवाज़ बंद करें',unmute:'आवाज़ चालू करें',
+ hi:{how:'पंख फड़फड़ाने के लिए टैप करें। हवा में रुकने के लिए दबाकर रखें (रस खर्च होता है)। रस भरने के लिए फूलों के बीच से उड़ें।',tap:'शुरू करने के लिए टैप करें',best:'रिकॉर्ड: ',over:'अरे, आप टकरा गए!',again:'फिर से खेलें',share:'स्कोर कॉपी करें',copied:'कॉपी हो गया! WhatsApp में पेस्ट करें',nocopy:'कॉपी नहीं हो सका',proto:'प्रोटोटाइप v1.1 · टेस्टिंग के लिए',nectar:'रस',mute:'आवाज़ बंद करें',unmute:'आवाज़ चालू करें',
   nh:'टेस्टर्स के लिए',nl:['कम से कम 5 बार खेलें।','क्या यह बहुत आसान है या बहुत मुश्किल?','क्या आपने हवा में रुकने की ट्रिक इस्तेमाल की?','आप कौन-सा पक्षी या लेवल अनलॉक करना चाहेंगे?'],
   msg:s=>`मैंने Colibrí Dash में ${s} अंक बनाए! 🐦 क्या आप मुझे हरा सकते हैं?`},
- nah:{how:'Xictzotzona ic tipatlaniz. Xicpiya ic timoquetzaz ilhuicac (quipolohua xochinecutli). Xipatlani ipan xochimeh ic ticuiz xochinecutli.',tap:'Xictzotzona ic tipehuaz',best:'Tlapanahuia: ',over:'Ayyo, otihuetz!',again:'Occeppa',share:'Tlapohualli 📋',copied:'Ye onca! Xictlali ipan WhatsApp',nocopy:'Amo huel',proto:'Prototipo v1.0 · ic tlayeyecoliztli',nectar:'xochinecutli',mute:'Amo tlacaquiztli',unmute:'Tlacaquiztli',
+ nah:{how:'Xictzotzona ic tipatlaniz. Xicpiya ic timoquetzaz ilhuicac (quipolohua xochinecutli). Xipatlani ipan xochimeh ic ticuiz xochinecutli.',tap:'Xictzotzona ic tipehuaz',best:'Tlapanahuia: ',over:'Ayyo, otihuetz!',again:'Occeppa',share:'Tlapohualli 📋',copied:'Ye onca! Xictlali ipan WhatsApp',nocopy:'Amo huel',proto:'Prototipo v1.1 · ic tlayeyecoliztli',nectar:'xochinecutli',mute:'Amo tlacaquiztli',unmute:'Tlacaquiztli',
   nh:'Ic tlayeyecoanimeh',nl:['Xiahahui macuilpa noso ocachi.','Cuix huel ohui noso amo ohui?','Cuix otimoquetz ilhuicac ica xochinecutli?','Catlehhuatl tototl noso tlalli ticnequi?'],
   msg:s=>`Niquinpia ${s} ipan Colibrí Dash! 🐦 Cuix huel tinechpanahuiz?`},
- de:{how:'Tippe, um mit den Flügeln zu schlagen. Halte gedrückt, um zu schweben (verbraucht Nektar). Flieg durch Blumen, um aufzutanken.',tap:'Tippe zum Starten',best:'Rekord: ',over:'Autsch, Bruchlandung!',again:'Nochmal spielen',share:'Punkte kopieren',copied:'Kopiert! Füge es in WhatsApp ein',nocopy:'Kopieren nicht möglich',proto:'Prototyp v1.0 · zum Testen',nectar:'Nektar',mute:'Ton aus',unmute:'Ton an',
+ de:{how:'Tippe, um mit den Flügeln zu schlagen. Halte gedrückt, um zu schweben (verbraucht Nektar). Flieg durch Blumen, um aufzutanken.',tap:'Tippe zum Starten',best:'Rekord: ',over:'Autsch, Bruchlandung!',again:'Nochmal spielen',share:'Punkte kopieren',copied:'Kopiert! Füge es in WhatsApp ein',nocopy:'Kopieren nicht möglich',proto:'Prototyp v1.1 · zum Testen',nectar:'Nektar',mute:'Ton aus',unmute:'Ton an',
   nh:'Für Tester',nl:['Spiel mindestens 5 Runden.','Ist es zu leicht oder zu schwer?','Hast du den Schwebe-Trick benutzt?','Welchen Vogel oder welches Level möchtest du freischalten?'],
   msg:s=>`Ich habe ${s} Punkte in Colibrí Dash! 🐦 Schaffst du mehr?`},
- fil:{how:'I-tap para pumagaspas. Pindutin nang matagal para lumutang (gumagamit ng nektar). Lumipad sa mga bulaklak para mag-recharge.',tap:'I-tap para magsimula',best:'Record: ',over:'Aray, bumangga ka!',again:'Maglaro ulit',share:'Kopyahin ang score',copied:'Nakopya na! I-paste sa WhatsApp',nocopy:'Hindi makopya',proto:'Prototype v1.0 · para sa testing',nectar:'nektar',mute:'I-mute',unmute:'I-unmute',
+ fil:{how:'I-tap para pumagaspas. Pindutin nang matagal para lumutang (gumagamit ng nektar). Lumipad sa mga bulaklak para mag-recharge.',tap:'I-tap para magsimula',best:'Record: ',over:'Aray, bumangga ka!',again:'Maglaro ulit',share:'Kopyahin ang score',copied:'Nakopya na! I-paste sa WhatsApp',nocopy:'Hindi makopya',proto:'Prototype v1.1 · para sa testing',nectar:'nektar',mute:'I-mute',unmute:'I-unmute',
   nh:'Para sa mga tester',nl:['Maglaro nang hindi bababa sa 5 beses.','Masyado bang madali o masyadong mahirap?','Nagamit mo ba ang trick na paglutang?','Anong ibon o level ang gusto mong i-unlock?'],
   msg:s=>`Naka-${s} ako sa Colibrí Dash! 🐦 Kaya mo ba akong talunin?`},
- sw:{how:'Gusa ili kupiga mabawa. Shikilia ili kuelea (inatumia nekta). Ruka kupitia maua ili kujaza tena.',tap:'Gusa ili kuanza',best:'Rekodi: ',over:'Lo! Umegonga!',again:'Cheza tena',share:'Nakili alama',copied:'Imenakiliwa! Ibandike kwenye WhatsApp',nocopy:'Imeshindwa kunakili',proto:'Mfano v1.0 · kwa majaribio',nectar:'nekta',mute:'Zima sauti',unmute:'Washa sauti',
+ sw:{how:'Gusa ili kupiga mabawa. Shikilia ili kuelea (inatumia nekta). Ruka kupitia maua ili kujaza tena.',tap:'Gusa ili kuanza',best:'Rekodi: ',over:'Lo! Umegonga!',again:'Cheza tena',share:'Nakili alama',copied:'Imenakiliwa! Ibandike kwenye WhatsApp',nocopy:'Imeshindwa kunakili',proto:'Mfano v1.1 · kwa majaribio',nectar:'nekta',mute:'Zima sauti',unmute:'Washa sauti',
   nh:'Kwa wanaojaribu',nl:['Cheza angalau mara 5.','Je, ni rahisi sana au ngumu sana?','Ulitumia mbinu ya kuelea?','Ungependa kufungua ndege au kiwango gani?'],
   msg:s=>`Nimepata alama ${s} kwenye Colibrí Dash! 🐦 Unaweza kunishinda?`},
- ja:{how:'タップで羽ばたく。長押しでホバリング（蜜を使う）。花をくぐって蜜を補給しよう。',tap:'タップでスタート',best:'ベスト：',over:'あっ、ぶつかった！',again:'もう一度',share:'スコアをコピー',copied:'コピーしました！LINEやWhatsAppに貼り付けてね',nocopy:'コピーできませんでした',proto:'プロトタイプ v1.0 · テスト用',nectar:'蜜',mute:'ミュート',unmute:'ミュート解除',
+ ja:{how:'タップで羽ばたく。長押しでホバリング（蜜を使う）。花をくぐって蜜を補給しよう。',tap:'タップでスタート',best:'ベスト：',over:'あっ、ぶつかった！',again:'もう一度',share:'スコアをコピー',copied:'コピーしました！LINEやWhatsAppに貼り付けてね',nocopy:'コピーできませんでした',proto:'プロトタイプ v1.1 · テスト用',nectar:'蜜',mute:'ミュート',unmute:'ミュート解除',
   nh:'テスターの皆さんへ',nl:['5回以上プレイしてね。','簡単すぎる？難しすぎる？','ホバリングは使った？','どんな鳥やステージを解放したい？'],
   msg:s=>`Colibrí Dashで${s}点取ったよ！🐦 勝てるかな？`},
- zh:{how:'点击拍动翅膀。长按悬停（消耗花蜜）。穿过花朵补充花蜜。',tap:'点击开始',best:'最高分：',over:'哎呀，撞到了！',again:'再玩一次',share:'复制分数',copied:'已复制！粘贴到微信或 WhatsApp',nocopy:'无法复制',proto:'原型 v1.0 · 测试版',nectar:'花蜜',mute:'静音',unmute:'取消静音',
+ zh:{how:'点击拍动翅膀。长按悬停（消耗花蜜）。穿过花朵补充花蜜。',tap:'点击开始',best:'最高分：',over:'哎呀，撞到了！',again:'再玩一次',share:'复制分数',copied:'已复制！粘贴到微信或 WhatsApp',nocopy:'无法复制',proto:'原型 v1.1 · 测试版',nectar:'花蜜',mute:'静音',unmute:'取消静音',
   nh:'致测试玩家',nl:['至少玩 5 局。','太简单还是太难？','你用过悬停技巧吗？','你想解锁什么鸟或关卡？'],
   msg:s=>`我在 Colibrí Dash 里得了 ${s} 分！🐦 你能超过我吗？`},
- yua:{how:"Péech' utia'al a xik'nal. Ma'ach utia'al a p'áatal ich ka'an (ku xu'ulul u kaabil lool). Xik'nal ichil le loolo'obo' utia'al a ch'a'ik kaab.",tap:"Péech' utia'al a káajal",best:"Asab ma'alob: ",over:"Ay, lúubech!",again:"Tu ka'aten",share:"Puntos 📋",copied:"Ts'o'ok! Ts'áa ti' WhatsApp",nocopy:"Ma' páajchaj",proto:"Prototipo v1.0 · utia'al u yiláal",nectar:"kaabil lool",mute:"Ma' juum",unmute:"Juum",
+ yua:{how:"Péech' utia'al a xik'nal. Ma'ach utia'al a p'áatal ich ka'an (ku xu'ulul u kaabil lool). Xik'nal ichil le loolo'obo' utia'al a ch'a'ik kaab.",tap:"Péech' utia'al a káajal",best:"Asab ma'alob: ",over:"Ay, lúubech!",again:"Tu ka'aten",share:"Puntos 📋",copied:"Ts'o'ok! Ts'áa ti' WhatsApp",nocopy:"Ma' páajchaj",proto:"Prototipo v1.1 · utia'al u yiláal",nectar:"kaabil lool",mute:"Ma' juum",unmute:"Juum",
   nh:"Ti' le máaxo'ob ku yilko'ob",nl:["Báaxtal jo'op'éel téen.","¿Jach chen wa jach talam?","¿Ta meentaj wa a p'áatal ich ka'an?","¿Ba'ax ch'íich' wa ba'ax kaaj a k'áat?"],
   msg:s=>`Tin ch'a'aj ${s} ich Colibrí Dash! 🐦 ¿Je'el a páajtal a máanselen?`}
 };
@@ -182,6 +183,10 @@ function clean(s){return (s||'').toLowerCase()
 function isBadNick(name){const c=clean(name);if(!c)return false;return BADWORDS.some(w=>w&&c.includes(w))}
 const F={"es": {"fb": "Comentarios", "diff": "¿Qué tan difícil es?", "easy": "Muy fácil", "ok": "Perfecto", "hard": "Muy difícil", "hov": "¿Usaste el truco de flotar?", "yes": "Sí", "no": "No", "wish": "¿Qué pájaro o nivel te gustaría? (opcional)", "send": "Enviar", "thanks": "¡Gracias por tu opinión!", "pick": "Elige una opción", "close": "Cerrar"}, "en": {"fb": "Feedback", "diff": "How hard is it?", "easy": "Too easy", "ok": "Just right", "hard": "Too hard", "hov": "Did you use the hover trick?", "yes": "Yes", "no": "No", "wish": "What bird or level would you want? (optional)", "send": "Send", "thanks": "Thanks for your feedback!", "pick": "Pick an option", "close": "Close"}, "pt": {"fb": "Comentários", "diff": "Qual a dificuldade?", "easy": "Fácil demais", "ok": "Perfeito", "hard": "Difícil demais", "hov": "Você usou o truque de pairar?", "yes": "Sim", "no": "Não", "wish": "Que pássaro ou fase você gostaria? (opcional)", "send": "Enviar", "thanks": "Obrigado pelo seu feedback!", "pick": "Escolha uma opção", "close": "Fechar"}, "fr": {"fb": "Commentaires", "diff": "C'est difficile?", "easy": "Trop facile", "ok": "Parfait", "hard": "Trop difficile", "hov": "As-tu utilisé le surplace?", "yes": "Oui", "no": "Non", "wish": "Quel oiseau ou niveau voudrais-tu? (facultatif)", "send": "Envoyer", "thanks": "Merci pour tes commentaires!", "pick": "Choisis une option", "close": "Fermer"}, "it": {"fb": "Feedback", "diff": "Quanto è difficile?", "easy": "Troppo facile", "ok": "Perfetto", "hard": "Troppo difficile", "hov": "Hai usato il volo sospeso?", "yes": "Sì", "no": "No", "wish": "Quale uccello o livello vorresti? (facoltativo)", "send": "Invia", "thanks": "Grazie per il tuo feedback!", "pick": "Scegli un'opzione", "close": "Chiudi"}, "de": {"fb": "Feedback", "diff": "Wie schwer ist es?", "easy": "Zu leicht", "ok": "Genau richtig", "hard": "Zu schwer", "hov": "Hast du den Schwebe-Trick benutzt?", "yes": "Ja", "no": "Nein", "wish": "Welchen Vogel oder welches Level möchtest du? (optional)", "send": "Senden", "thanks": "Danke für dein Feedback!", "pick": "Wähle eine Option", "close": "Schließen"}, "id": {"fb": "Masukan", "diff": "Seberapa sulit?", "easy": "Terlalu mudah", "ok": "Pas", "hard": "Terlalu sulit", "hov": "Pakai trik melayang?", "yes": "Ya", "no": "Tidak", "wish": "Burung atau level apa yang kamu mau? (opsional)", "send": "Kirim", "thanks": "Terima kasih atas masukanmu!", "pick": "Pilih satu", "close": "Tutup"}, "fil": {"fb": "Feedback", "diff": "Gaano kahirap?", "easy": "Sobrang dali", "ok": "Tama lang", "hard": "Sobrang hirap", "hov": "Ginamit mo ba ang paglutang?", "yes": "Oo", "no": "Hindi", "wish": "Anong ibon o level ang gusto mo? (opsyonal)", "send": "Ipadala", "thanks": "Salamat sa feedback mo!", "pick": "Pumili", "close": "Isara"}, "sw": {"fb": "Maoni", "diff": "Ni ngumu kiasi gani?", "easy": "Rahisi mno", "ok": "Sawa kabisa", "hard": "Ngumu mno", "hov": "Ulitumia mbinu ya kuelea?", "yes": "Ndiyo", "no": "Hapana", "wish": "Ungependa ndege au kiwango gani? (si lazima)", "send": "Tuma", "thanks": "Asante kwa maoni yako!", "pick": "Chagua moja", "close": "Funga"}, "hi": {"fb": "फ़ीडबैक", "diff": "कितना मुश्किल है?", "easy": "बहुत आसान", "ok": "बिलकुल सही", "hard": "बहुत मुश्किल", "hov": "क्या आपने हवा में रुकने की ट्रिक इस्तेमाल की?", "yes": "हाँ", "no": "नहीं", "wish": "आप कौन-सा पक्षी या लेवल चाहेंगे? (वैकल्पिक)", "send": "भेजें", "thanks": "आपके फ़ीडबैक के लिए धन्यवाद!", "pick": "एक विकल्प चुनें", "close": "बंद करें"}, "ja": {"fb": "フィードバック", "diff": "難しさは？", "easy": "簡単すぎる", "ok": "ちょうどいい", "hard": "難しすぎる", "hov": "ホバリングは使った？", "yes": "はい", "no": "いいえ", "wish": "どんな鳥やステージがほしい？（任意）", "send": "送信", "thanks": "フィードバックありがとう！", "pick": "選んでね", "close": "閉じる"}, "zh": {"fb": "反馈", "diff": "难度如何？", "easy": "太简单", "ok": "刚刚好", "hard": "太难", "hov": "你用过悬停技巧吗？", "yes": "用了", "no": "没有", "wish": "你想要什么鸟或关卡？（可选）", "send": "发送", "thanks": "感谢你的反馈！", "pick": "请选择", "close": "关闭"}};
 function fx(){return Object.assign({},F.en,F[FB[lang]||'en'],F[lang]||{})}
+const CHS={"es": {"beat": "Supera a", "won": "¡Superaste el reto!"}, "en": {"beat": "Beat", "won": "You beat the challenge!"}, "pt": {"beat": "Supere", "won": "Você superou o desafio!"}, "fr": {"beat": "Bats", "won": "Défi relevé!"}, "it": {"beat": "Batti", "won": "Sfida superata!"}, "de": {"beat": "Schlag", "won": "Challenge geschafft!"}, "id": {"beat": "Kalahkan", "won": "Tantangan terlewati!"}, "fil": {"beat": "Talunin si", "won": "Natalo mo ang hamon!"}, "sw": {"beat": "Mshinde", "won": "Umeshinda changamoto!"}, "hi": {"beat": "हराओ", "won": "आपने चुनौती जीती!"}, "ja": {"beat": "超えろ", "won": "チャレンジ達成！"}, "zh": {"beat": "超越", "won": "挑战成功！"}};
+function cx(){return Object.assign({},CHS.en,CHS[FB[lang]||'en'],CHS[lang]||{})}
+function setChal(){const e=document.getElementById('t-chal');if(!e)return;if(CHAL>0){const L=cx();e.textContent='\u{1F3AF} '+L.beat+' '+(CHALN?CHALN+' \u00b7 ':'')+CHAL}else e.textContent=''}
+
 let fbDiff='',fbHov=null;
 function applyFb(){const L=fx();$('fbTitle').textContent='💬 '+L.fb;$('fbBtn').textContent='💬 '+L.fb;
  $('q-diff').textContent=L.diff;const d=$('diffOpts').children;d[0].textContent=L.easy;d[1].textContent=L.ok;d[2].textContent=L.hard;
@@ -206,6 +211,8 @@ try{group=localStorage.getItem('cd-group')||'';nick=localStorage.getItem('cd-nic
 // --- analytics (GoatCounter, anonymous counts) ---
 function gc(path,title){try{if(window.goatcounter&&goatcounter.count)goatcounter.count({path,title,event:true})}catch(e){}}
 const REF=new URLSearchParams(location.search).get('ref');
+const CHAL=parseInt(new URLSearchParams(location.search).get('c'),10)||0;
+const CHALN=((new URLSearchParams(location.search).get('cn')||'').replace(/[<>]/g,'')).slice(0,16);
 let gameStart=0,visitStart=Date.now(),playsThisVisit=0,countedRef=false;
 function bucket(sec){return sec<10?'0-10s':sec<30?'10-30s':sec<60?'30-60s':sec<120?'1-2m':sec<300?'2-5m':'5m+'}
 function countRef(){if(countedRef)return;countedRef=true;if(REF)gc('ref/'+REF.replace(/[^A-Za-z0-9_-]/g,''),'Referral: '+REF)}
@@ -241,7 +248,9 @@ const sfx={
  flap(){tone(260,140,0.08,'sawtooth',0.045);tone(520,300,0.05,'triangle',0.03)},
  chime(){[1046,1318,1568].forEach((f,i)=>tone(f,0,0.35,'sine',0.12,i*0.06))},
  crash(){const a=ac();if(!a||muted)return;const t=a.currentTime,n=a.sampleRate*0.35|0,b=a.createBuffer(1,n,a.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n)**2;const s=a.createBufferSource(),g=a.createGain(),f=a.createBiquadFilter();f.type='lowpass';f.frequency.setValueAtTime(2000,t);f.frequency.exponentialRampToValueAtTime(200,t+0.3);g.gain.value=0.35;s.buffer=b;s.connect(f).connect(g).connect(a.destination);s.start(t);tone(200,50,0.45,'square',0.09)},
- fanfare(){[523,659,784,1047].forEach((f,i)=>tone(f,0,0.3,'triangle',0.09,i*0.09));tone(1047,1568,0.5,'sine',0.05,0.36)}
+ fanfare(){[523,659,784,1047].forEach((f,i)=>tone(f,0,0.3,'triangle',0.09,i*0.09));tone(1047,1568,0.5,'sine',0.05,0.36)},
+ power(){[700,1000,1300].forEach((f,i)=>tone(f,0,0.16,'triangle',0.08,i*0.05))},
+ shieldbreak(){tone(400,120,0.25,'sawtooth',0.08);tone(900,300,0.2,'square',0.05)}
 };
 function hum(on){const a=AC;if(!a)return;
  if(on&&!muted&&!humO){humO=a.createOscillator();humG=a.createGain();const l=a.createOscillator(),lg=a.createGain(),f=a.createBiquadFilter();humO.type='sawtooth';humO.frequency.value=120;l.frequency.value=38;lg.gain.value=0.025;humG.gain.value=0.03;f.type='lowpass';f.frequency.value=900;l.connect(lg).connect(humG.gain);humO.connect(f).connect(humG).connect(a.destination);humO.start();l.start();humO._l=l}
@@ -254,6 +263,7 @@ function applyLang(){
  $('t-over').textContent=L.over;$('again').textContent=L.again;$('share').textContent=L.share;
  $('t-proto').textContent=L.proto;{const Q=tx();$('saveBtn').textContent=Q.save;$('nick').placeholder=Q.nick;$('nick').setAttribute('aria-label',Q.nick);$('lbBtn').textContent='🏆 '+Q.lb;$('trophy').setAttribute('aria-label',Q.lb);$('trophy').title=Q.lb;$('lbTitle').textContent='🏆 '+Q.lb;$('tabW').textContent=Q.week;$('tabA').textContent=Q.all;$('t-group').textContent=Q.group;$('lbClose').textContent=Q.close;boardLabels();applyFb()}updMute();$('lang').value=lang;$('t-nh').textContent=L.nh;
  $('t-nl').innerHTML=L.nl.map(x=>`<li>${x}</li>`).join('');
+ setChal();
 }
 applyLang();
 
@@ -265,8 +275,9 @@ const ro=new ResizeObserver(size);ro.observe(game);
 const GRAV=1050,FLAP=-340,MAXFALL=430,PW=58,FLAGS=['#ff3d8b','#ffb53b','#27c1d9','#8f5cff','#3ccf6e','#ff6b3d'];
 let state='ready',bird,pipes,flowers,score,speed,spawnT,nectar,holding=false,holdT=0,time=0,shake=0,last=0;
 let celebText='',celebT=0,parts=[],milesHit=new Set(),nightAmt=0,nightTarget=0,golden=null;
+let shield=false,invT=0,slowT=0,pups=[],pupT=5,chalBeaten=false;
 const far=Array.from({length:14},(_,i)=>({x:i*48,h:40+((i*37)%50),dome:i%4===1}));
-function reset(){bird={x:95,y:H*0.42,vy:0,rot:0};pipes=[];flowers=0;score=0;speed=105;spawnT=1.6;nectar=1;celebText='';celebT=0;parts=[];milesHit=new Set();nightAmt=0;nightTarget=0;golden=null}
+function reset(){bird={x:95,y:H*0.42,vy:0,rot:0};pipes=[];flowers=0;score=0;speed=105;spawnT=1.6;nectar=1;celebText='';celebT=0;parts=[];milesHit=new Set();nightAmt=0;nightTarget=0;golden=null;shield=false;invT=0;slowT=0;pups=[];pupT=5;chalBeaten=false}
 reset();
 
 const MILES=[25,50,100,200];
@@ -291,6 +302,12 @@ function celebrate(m,tier){
  if(m>=50){nightTarget=1;golden={t:0,y:90+Math.random()*130}}
 }
 function checkMiles(){for(let i=0;i<MILES.length;i++){const m=MILES[i];if(score>=m&&!milesHit.has(m)){milesHit.add(m);celebrate(m,i)}}}
+function spawnPup(){pups.push({x:W+24,y:150+Math.random()*(GROUND-300),t:Math.random()<0.5?'shield':'slow',got:false})}
+function hit(ground){
+ if(invT>0){if(ground)bird.vy=FLAP*0.6;return}
+ if(shield){shield=false;invT=1;sfx.shieldbreak();shake=0.2;bird.vy=FLAP*0.85;
+  for(let i=0;i<10;i++)parts.push({x:bird.x,y:bird.y,vx:(Math.random()-.5)*180,vy:-60-Math.random()*120,rot:0,vr:0,c:'#8fe9f5',f:false,life:0.8});return}
+ die()}
 
 function spawn(){
  const gap=Math.max(140,178-score*1.6);
@@ -349,7 +366,8 @@ $('fbBtn').addEventListener('click',openFb);$('fbClose').addEventListener('click
 for(const btn of $('diffOpts').children)btn.addEventListener('click',()=>{fbDiff=btn.dataset.v;applyFb()});
 for(const btn of $('hovOpts').children)btn.addEventListener('click',()=>{fbHov=btn.dataset.v==='yes';applyFb()});
 let toastT;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1800)}
-$('share').addEventListener('click',async()=>{try{const link=/^https?:$/.test(location.protocol)?' '+location.origin+location.pathname+(group?'?g='+group:''):'';await navigator.clipboard.writeText(T[lang].msg(score)+link);gc('share/'+lang,'Share ('+lang+')');toast(T[lang].copied)}catch(e){toast(T[lang].nocopy)}});
+$('share').addEventListener('click',async()=>{try{let link='';if(/^https?:$/.test(location.protocol)){const qp=[];if(group)qp.push('g='+group);if(score>0){qp.push('c='+score);if(nick)qp.push('cn='+encodeURIComponent(nick))}link=' '+location.origin+location.pathname+(qp.length?'?'+qp.join('&'):'')}
+ await navigator.clipboard.writeText(T[lang].msg(score)+link);gc('share/'+lang,'Share ('+lang+')');toast(T[lang].copied)}catch(e){toast(T[lang].nocopy)}});
 
 function update(dt){
  time+=dt;if(shake>0)shake-=dt;
@@ -361,25 +379,31 @@ function update(dt){
  if(state==='over'){if(bird.y<GROUND-12){bird.vy+=GRAV*dt;bird.y+=bird.vy*dt;bird.rot=Math.min(bird.rot+dt*6,1.4)}return}
  if(holding)holdT+=dt;
  const hovering=holding&&holdT>0.25&&nectar>0;
- if(hovering){bird.vy*=Math.pow(0.02,dt);nectar=Math.max(0,nectar-dt)}
- else{bird.vy=Math.min(MAXFALL,bird.vy+GRAV*dt);nectar=Math.min(1,nectar+dt*0.04)}
- bird.y+=bird.vy*dt;
+ const ts=slowT>0?0.55:1,gdt=dt*ts;
+ if(hovering){bird.vy*=Math.pow(0.02,gdt);nectar=Math.max(0,nectar-dt)}
+ else{bird.vy=Math.min(MAXFALL,bird.vy+GRAV*gdt);nectar=Math.min(1,nectar+dt*0.04)}
+ bird.y+=bird.vy*gdt;
  bird.rot=hovering?0:Math.max(-0.4,Math.min(0.6,bird.vy/800));
  bird.hover=hovering;hum(hovering);
+ if(slowT>0)slowT-=dt;if(invT>0)invT-=dt;
  speed=105+Math.min(score,50)*2;
- spawnT-=dt;if(spawnT<=0){spawn();spawnT=230/speed}
+ spawnT-=gdt;if(spawnT<=0){spawn();spawnT=230/speed}
+ pupT-=gdt;if(pupT<=0&&score>=3){spawnPup();pupT=7+Math.random()*4}
+ for(const u of pups){u.x-=speed*gdt;if(!u.got&&Math.hypot(u.x-bird.x,u.y-bird.y)<24){u.got=true;if(u.t==='shield')shield=true;else slowT=4;sfx.power()}}
+ pups=pups.filter(u=>u.x>-30&&!u.got);
  for(const p of pipes){
-  p.x-=speed*dt;
+  p.x-=speed*gdt;
   if(p.amp){p.cy=p.base+Math.sin(time*1.8+p.ph)*p.amp;p.cy=Math.max(110,Math.min(GROUND-110,p.cy))}
   if(!p.scored&&p.x+PW<bird.x){p.scored=true;score++}
   const fx=p.x+PW/2,fy=p.fl.y-p.base+p.cy;
   if(!p.fl.got&&Math.hypot(fx-bird.x,fy-bird.y)<26){p.fl.got=true;flowers++;score++;nectar=Math.min(1,nectar+0.4);sfx.chime()}
   const top=p.cy-p.gap/2,bot=p.cy+p.gap/2,r=11;
-  if(bird.x+r>p.x+4&&bird.x-r<p.x+PW-4&&(bird.y-r<top||bird.y+r>bot))die();
+  if(bird.x+r>p.x+4&&bird.x-r<p.x+PW-4&&(bird.y-r<top||bird.y+r>bot))hit(false);
  }
  pipes=pipes.filter(p=>p.x>-PW-40);
  checkMiles();
- if(bird.y>GROUND-12){bird.y=GROUND-12;die()}
+ if(CHAL>0&&!chalBeaten&&score>CHAL){chalBeaten=true;const L=cx();celebText=L.won;celebT=2.6;sfx.fanfare();for(let i=0;i<24;i++)parts.push({x:W/2+(Math.random()-.5)*90,y:120,vx:(Math.random()-.5)*230,vy:-130-Math.random()*170,rot:Math.random()*6,vr:(Math.random()-.5)*9,c:FLAGS[i%FLAGS.length],f:Math.random()<.4,life:1.7});gc('beat-challenge','Beat challenge')}
+ if(bird.y>GROUND-12){bird.y=GROUND-12;hit(true)}
  if(bird.y<-30){bird.y=-30;bird.vy=0}
 }
 
@@ -456,6 +480,7 @@ function drawBird(){
 }
 function drawHud(){
  if(state==='ready')return;
+ if(slowT>0){ctx.fillStyle='#27c1d9';ctx.globalAlpha=0.12;ctx.fillRect(0,0,W,GROUND);ctx.globalAlpha=1}
  ctx.textAlign='center';ctx.font='48px "Lilita One",sans-serif';
  ctx.fillStyle='#7a1e6b';ctx.fillText(score,W/2,74);ctx.fillStyle='#fff';ctx.fillText(score,W/2,70);
  ctx.fillStyle='#0006';rr(16,GROUND+24,120,14,7);ctx.fill();
@@ -463,6 +488,8 @@ function drawHud(){
  ctx.textAlign='left';ctx.font='800 12px Nunito,"Baloo 2",sans-serif';ctx.fillStyle='#fff';
  ctx.fillText(T[lang].nectar,146,GROUND+36);
  ctx.textAlign='right';ctx.fillText('🌸 '+flowers,W-16,GROUND+36);
+ if(CHAL>0&&!chalBeaten){ctx.textAlign='center';ctx.font='800 15px Nunito,"Baloo 2",sans-serif';ctx.fillStyle='#ffb53b';ctx.fillText((CHALN?CHALN+': ':'')+CHAL,W/2,100);ctx.textAlign='left'}
+ if(slowT>0){const sx=W/2,sy=124;ctx.strokeStyle='#bff3fb';ctx.lineWidth=2.5;ctx.beginPath();ctx.arc(sx,sy,9,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx,sy-6);ctx.moveTo(sx,sy);ctx.lineTo(sx+4,sy+1);ctx.stroke()}
 }
 function drawGolden(x,y){ctx.save();ctx.translate(x,y);const wf=Math.sin(time*60);
  ctx.fillStyle='#fff3b0';ctx.globalAlpha=.5;ctx.beginPath();ctx.ellipse(-3,-6,18,7,-0.5,0,7);ctx.fill();ctx.globalAlpha=1;
@@ -478,6 +505,11 @@ function drawParts(){for(const q of parts){ctx.save();ctx.globalAlpha=Math.min(1
 function drawCeleb(){if(celebT<=0)return;const a=Math.min(1,celebT*1.6);ctx.save();ctx.globalAlpha=a;ctx.textAlign='center';
  ctx.font='34px \"Lilita One\",sans-serif';ctx.fillStyle='#7a1e6b';ctx.fillText(celebText,W/2,H*0.36+3);
  ctx.fillStyle='#ffd23b';ctx.fillText(celebText,W/2,H*0.36);ctx.restore();ctx.textAlign='left'}
+function drawPups(){for(const u of pups){if(u.got)continue;const bob=Math.sin(time*4+u.x*0.05)*4;ctx.save();ctx.translate(u.x,u.y+bob);
+ if(u.t==='shield'){ctx.fillStyle='#1b9fc4';ctx.globalAlpha=.85;ctx.beginPath();ctx.moveTo(0,-13);ctx.lineTo(11,-7);ctx.lineTo(11,4);ctx.quadraticCurveTo(0,15,0,15);ctx.quadraticCurveTo(-11,8,-11,4);ctx.lineTo(-11,-7);ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='#bff3fb';ctx.lineWidth=2;ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(-4,-1);ctx.lineTo(-1,4);ctx.lineTo(5,-5);ctx.stroke()}
+ else{ctx.fillStyle='#8f5cff';ctx.beginPath();ctx.arc(0,0,13,0,7);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(0,0,9,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-6);ctx.moveTo(0,0);ctx.lineTo(5,2);ctx.stroke();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,-12,2,0,7);ctx.fill()}
+ ctx.restore()}}
+function drawShield(){if(!shield&&invT<=0)return;ctx.save();ctx.globalAlpha=0.35+0.3*Math.sin(time*9);ctx.strokeStyle=shield?'#8fe9f5':'#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(bird.x,bird.y,20,0,7);ctx.stroke();ctx.restore()}
 function frame(t){
  const dt=Math.min(0.033,(t-(last||t))/1000);last=t;
  update(dt);
@@ -485,7 +517,7 @@ function frame(t){
  if(shake>0)ctx.translate((Math.random()-.5)*8*shake/.35,(Math.random()-.5)*8*shake/.35);
  drawBg();
  for(const p of pipes){drawPapel(p);drawCactus(p);drawFlower(p)}
- drawBird();drawParts();ctx.restore();drawHud();drawCeleb();
+ drawPups();drawBird();drawShield();drawParts();ctx.restore();drawHud();drawCeleb();
  requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
