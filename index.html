@@ -6,6 +6,8 @@
 <title>Colibrí Dash</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@600;800&family=Baloo+2:wght@600;800&display=swap" rel="stylesheet">
+<script>window.goatcounter={no_onload:true}</script>
+<script data-goatcounter="https://colibri-dash.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <style>
 /* VOICE: playful, warm, a little fiesta — a game in a hand-painted housing
    IDEA: a town at dusk during a fiesta, seen from a hummingbird's eye
@@ -160,6 +162,13 @@ const SB='https://pcbublrlrudzhquldtrk.supabase.co/rest/v1/scores',KEY='sb_publi
 let group='',nick='',lbMode='week';
 try{group=localStorage.getItem('cd-group')||'';nick=localStorage.getItem('cd-nick')||''}catch(e){}
 {const qg=new URLSearchParams(location.search).get('g');if(qg&&/^[A-Z0-9]{3,12}$/i.test(qg)){group=qg.toUpperCase();try{localStorage.setItem('cd-group',group)}catch(e){}}}
+// --- analytics (GoatCounter, anonymous counts) ---
+function gc(path,title){try{if(window.goatcounter&&goatcounter.count)goatcounter.count({path,title,event:true})}catch(e){}}
+const REF=new URLSearchParams(location.search).get('ref');
+let gameStart=0,visitStart=Date.now(),playsThisVisit=0,countedVisit=false;
+function bucket(sec){return sec<10?'0-10s':sec<30?'10-30s':sec<60?'30-60s':sec<120?'1-2m':sec<300?'2-5m':'5m+'}
+function countVisit(){if(countedVisit)return;countedVisit=true;gc('visit','Visit'+(REF?' via '+REF:''));if(REF)gc('ref/'+REF.replace(/[^A-Za-z0-9_-]/g,''),'Referral: '+REF)}
+addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden'){const v=Math.round((Date.now()-visitStart)/1000);if(playsThisVisit)gc('session/'+bucket(v),'Session '+bucket(v))}});
 function weekStart(){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));return d.toISOString()}
 async function fetchBoard(){
  let q='?select=nickname,score&order=score.desc,created_at.asc&limit=60&group_code='+(group?'eq.'+group:'is.null');
@@ -222,7 +231,7 @@ function spawn(){
   fl:{y:cy+(Math.random()-0.5)*gap*0.4,got:false},cactusArms:Math.random()<0.5});
 }
 function flap(){
- if(state==='ready'){state='play';$('start').classList.add('hide')}
+ if(state==='ready'){state='play';$('start').classList.add('hide');countVisit();gameStart=Date.now();playsThisVisit++;gc('play/'+lang,'Play ('+lang+')')}
  if(state!=='play')return;
  bird.vy=FLAP;holding=true;holdT=0;sfx.flap();
 }
@@ -231,6 +240,7 @@ function die(){
  if(state==='over')return;
  state='over';shake=0.35;hum(false);sfx.crash();
  if(score>best){best=score;try{localStorage.setItem('cd-best',best)}catch(e){}}
+ const dur=gameStart?Math.round((Date.now()-gameStart)/1000):0;gc('round/'+bucket(dur),'Round '+bucket(dur));const sb=score<5?'0-4':score<10?'5-9':score<20?'10-19':score<40?'20-39':'40+';gc('score/'+sb,'Score '+sb);
  $('final').textContent=score;$('saveBox').classList.toggle('hide',score<1);$('saveBtn').disabled=false;$('nick').value=nick;applyLang();
  setTimeout(()=>$('over').classList.remove('hide'),450);
 }
@@ -256,7 +266,7 @@ async function saveScore(){
  const b=$('saveBtn');b.disabled=true;
  try{const r=await fetch(SB,{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json',Prefer:'return=minimal'},
    body:JSON.stringify({nickname:n,score:Math.min(score,999),flowers:Math.min(flowers,999),lang,group_code:group||null})});
-  if(!r.ok)throw new Error(r.status);toast(tx().saved);$('saveBox').classList.add('hide');openBoard()}
+  if(!r.ok)throw new Error(r.status);gc('save-score','Saved score');toast(tx().saved);$('saveBox').classList.add('hide');openBoard()}
  catch(e){b.disabled=false;toast(tx().err)}}
 $('saveBtn').addEventListener('click',saveScore);
 $('nick').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveScore()}});
@@ -267,7 +277,7 @@ $('tabW').addEventListener('click',()=>{lbMode='week';boardLabels();renderBoard(
 $('tabA').addEventListener('click',()=>{lbMode='all';boardLabels();renderBoard()});
 $('gcode').addEventListener('change',e=>{const v=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,12);group=v.length>=3?v:'';e.target.value=group;try{localStorage.setItem('cd-group',group)}catch(err){}boardLabels();renderBoard()});
 let toastT;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1800)}
-$('share').addEventListener('click',async()=>{try{const link=/^https?:$/.test(location.protocol)?' '+location.origin+location.pathname+(group?'?g='+group:''):'';await navigator.clipboard.writeText(T[lang].msg(score)+link);toast(T[lang].copied)}catch(e){toast(T[lang].nocopy)}});
+$('share').addEventListener('click',async()=>{try{const link=/^https?:$/.test(location.protocol)?' '+location.origin+location.pathname+(group?'?g='+group:''):'';await navigator.clipboard.writeText(T[lang].msg(score)+link);gc('share/'+lang,'Share ('+lang+')');toast(T[lang].copied)}catch(e){toast(T[lang].nocopy)}});
 
 function update(dt){
  time+=dt;if(shake>0)shake-=dt;
