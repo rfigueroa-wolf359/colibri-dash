@@ -286,9 +286,9 @@ const SCENES={
 let state='ready',bird,pipes,flowers,score,speed,spawnT,nectar,holding=false,holdT=0,time=0,shake=0,last=0;
 let celebText='',celebT=0,parts=[],milesHit=new Set(),nightAmt=0,nightTarget=0,golden=null;
 let shield=false,invT=0,slowT=0,pups=[],pupT=5,chalBeaten=false;
-let scene='city',rainbow=false,warpRun=false,warpIntroT=0,noSave=false,trail=[];
+let scene='city',rainbow=false,warpRun=false,warpIntroT=0,noSave=false,trail=[],wormT=12;
 const far=Array.from({length:14},(_,i)=>({x:i*48,h:40+((i*37)%50),dome:i%4===1}));
-function reset(){bird={x:95,y:H*0.42,vy:0,rot:0};pipes=[];flowers=0;score=0;speed=105;spawnT=1.6;nectar=1;celebText='';celebT=0;parts=[];milesHit=new Set();nightAmt=0;nightTarget=0;golden=null;shield=false;invT=0;slowT=0;pups=[];pupT=5;chalBeaten=false;scene='city';rainbow=false;warpRun=false;warpIntroT=0;noSave=false;trail=[]}
+function reset(){bird={x:95,y:H*0.42,vy:0,rot:0};pipes=[];flowers=0;score=0;speed=105;spawnT=1.6;nectar=1;celebText='';celebT=0;parts=[];milesHit=new Set();nightAmt=0;nightTarget=0;golden=null;shield=false;invT=0;slowT=0;pups=[];pupT=5;chalBeaten=false;scene='city';rainbow=false;warpRun=false;warpIntroT=0;noSave=false;trail=[];wormT=12}
 reset();
 
 const MILES=[25,50,100,200];
@@ -313,7 +313,7 @@ function celebrate(m,tier){
  if(m>=50){nightTarget=1;golden={t:0,y:90+Math.random()*130}}
 }
 function checkMiles(){for(let i=0;i<MILES.length;i++){const m=MILES[i];if(score>=m&&!milesHit.has(m)){milesHit.add(m);celebrate(m,i)}}}
-function spawnPup(){let t;const r=Math.random();if(score>=8&&r<0.2)t='worm';else t=r<0.6?'shield':'slow';pups.push({x:W+24,y:150+Math.random()*(GROUND-300),t,got:false})}
+function spawnPup(){pups.push({x:W+24,y:150+Math.random()*(GROUND-300),t:Math.random()<0.5?'shield':'slow',got:false})}
 function startWarp(){const o=['jungle','antarctic','hawaii'].filter(x=>x!==scene);scene=o[Math.floor(Math.random()*o.length)];warpRun=true;rainbow=true;warpIntroT=1.3;invT=1.3;trail=[];sfx.warp();gc('warp/'+scene,'Warp to '+scene)}
 function hit(ground){
  if(invT>0){if(ground)bird.vy=FLAP*0.6;return}
@@ -398,11 +398,12 @@ function update(dt){
  bird.rot=hovering?0:Math.max(-0.4,Math.min(0.6,bird.vy/800));
  bird.hover=hovering;hum(hovering);
  if(slowT>0)slowT-=dt;if(invT>0)invT-=dt;if(warpIntroT>0)warpIntroT-=dt;
- if(rainbow){trail.push({x:bird.x,y:bird.y});if(trail.length>14)trail.shift()}
+ if(rainbow){trail.push({x:bird.x,y:bird.y});if(trail.length>18)trail.shift()}
  speed=(105+Math.min(score,50)*2)*(warpIntroT>0?2.2:warpRun?1.3:1);
  spawnT-=gdt;if(spawnT<=0){spawn();spawnT=230/speed}
  pupT-=gdt;if(pupT<=0&&score>=3){spawnPup();pupT=7+Math.random()*4}
- for(const u of pups){u.x-=speed*gdt;if(!u.got&&Math.hypot(u.x-bird.x,u.y-bird.y)<24){u.got=true;if(u.t==='shield'){shield=true;sfx.power()}else if(u.t==='slow'){slowT=4;sfx.power()}else startWarp()}}
+ wormT-=gdt;if(wormT<=0&&score>=5){pups.push({x:W+24,y:220+Math.random()*200,t:'worm',got:false});wormT=14+Math.random()*6}
+ for(const u of pups){u.x-=speed*gdt;if(!u.got&&Math.hypot(u.x-bird.x,u.y-bird.y)<(u.t==='worm'?34:24)){u.got=true;if(u.t==='shield'){shield=true;sfx.power()}else if(u.t==='slow'){slowT=4;sfx.power()}else startWarp()}}
  pups=pups.filter(u=>u.x>-30&&!u.got);
  for(const p of pipes){
   p.x-=speed*gdt;
@@ -463,8 +464,8 @@ function drawScene(off){
    ctx.strokeStyle='#1f7a45';ctx.lineWidth=5;for(let a=0;a<5;a++){const ang=-2.5+a*0.5;ctx.beginPath();ctx.moveTo(x+12,ty);ctx.quadraticCurveTo(x+12+Math.cos(ang)*16,ty+Math.sin(ang)*16-4,x+12+Math.cos(ang)*34,ty+Math.sin(ang)*30);ctx.stroke()}}
  }
 }
-function drawTrail(){if(!rainbow||!trail.length)return;const H6=['#ff3d8b','#ff8a3d','#ffd23b','#3ccf6e','#27c1d9','#8f5cff'];
- for(let i=0;i<trail.length;i++){const t=trail[i],a=i/trail.length;ctx.globalAlpha=a*0.75;ctx.fillStyle=H6[i%6];ctx.beginPath();ctx.arc(t.x-12,t.y,2+6*a,0,7);ctx.fill()}ctx.globalAlpha=1}
+function drawTrail(){if(!rainbow||trail.length<2)return;const H6=['#ff3d8b','#ff8a3d','#ffd23b','#3ccf6e','#27c1d9','#8f5cff'];const n=trail.length;
+ for(let i=0;i<n;i++){const t=trail[i],a=(i+1)/n,x=bird.x-14-(n-1-i)*7;ctx.globalAlpha=a*0.85;ctx.fillStyle=H6[(n-1-i)%6];ctx.beginPath();ctx.arc(x,t.y,3+5*a,0,7);ctx.fill()}ctx.globalAlpha=1}
 function drawWarp(){if(warpIntroT<=0)return;const f=warpIntroT/1.3,H6=['#ff3d8b','#ffd23b','#3ccf6e','#27c1d9','#8f5cff','#ff8a3d'];ctx.save();ctx.globalAlpha=0.55*f;ctx.lineWidth=3;
  for(let i=0;i<16;i++){ctx.strokeStyle=H6[i%6];const r=((i*26+(time*900)%26)*(1.3-f))%320;ctx.beginPath();ctx.arc(W/2,H*0.42,r,0,7);ctx.stroke()}ctx.restore()}
 function drawPapel(p){
@@ -543,7 +544,7 @@ function drawCeleb(){if(celebT<=0)return;const a=Math.min(1,celebT*1.6);ctx.save
 function drawPups(){for(const u of pups){if(u.got)continue;const bob=Math.sin(time*4+u.x*0.05)*4;ctx.save();ctx.translate(u.x,u.y+bob);
  if(u.t==='shield'){ctx.fillStyle='#1b9fc4';ctx.globalAlpha=.85;ctx.beginPath();ctx.moveTo(0,-13);ctx.lineTo(11,-7);ctx.lineTo(11,4);ctx.quadraticCurveTo(0,15,0,15);ctx.quadraticCurveTo(-11,8,-11,4);ctx.lineTo(-11,-7);ctx.closePath();ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='#bff3fb';ctx.lineWidth=2;ctx.stroke();ctx.strokeStyle='#fff';ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(-4,-1);ctx.lineTo(-1,4);ctx.lineTo(5,-5);ctx.stroke()}
  else if(u.t==='slow'){ctx.fillStyle='#8f5cff';ctx.beginPath();ctx.arc(0,0,13,0,7);ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=2.4;ctx.beginPath();ctx.arc(0,0,9,0,7);ctx.stroke();ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-6);ctx.moveTo(0,0);ctx.lineTo(5,2);ctx.stroke();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,-12,2,0,7);ctx.fill()}
- else{ctx.rotate(time*3);const H6=['#ff3d8b','#ffd23b','#3ccf6e','#27c1d9','#8f5cff'];for(let a=0;a<5;a++){ctx.strokeStyle=H6[a];ctx.lineWidth=3;ctx.beginPath();for(let t2=0;t2<6.3;t2+=0.3){const rr2=2+t2*2.2;ctx.lineTo(Math.cos(t2+a*1.26)*rr2,Math.sin(t2+a*1.26)*rr2)}ctx.stroke()}ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,3,0,7);ctx.fill()}
+ else{ctx.fillStyle='#8f5cff';ctx.globalAlpha=0.25;ctx.beginPath();ctx.arc(0,0,26,0,7);ctx.fill();ctx.globalAlpha=1;ctx.rotate(time*3);const H6=['#ff3d8b','#ffd23b','#3ccf6e','#27c1d9','#8f5cff'];for(let a=0;a<5;a++){ctx.strokeStyle=H6[a];ctx.lineWidth=3.5;ctx.beginPath();for(let t2=0;t2<6.6;t2+=0.3){const rr2=2+t2*3;ctx.lineTo(Math.cos(t2+a*1.26)*rr2,Math.sin(t2+a*1.26)*rr2)}ctx.stroke()}ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(0,0,3.5,0,7);ctx.fill()}
  ctx.restore()}}
 function drawShield(){if(!shield&&invT<=0)return;ctx.save();ctx.globalAlpha=0.35+0.3*Math.sin(time*9);ctx.strokeStyle=shield?'#8fe9f5':'#fff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(bird.x,bird.y,20,0,7);ctx.stroke();ctx.restore()}
 function frame(t){
